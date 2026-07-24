@@ -8,8 +8,9 @@ import { Player } from "../entities/Player.js";
 import { World } from "../world/World.js";
 
 import { QuestManager } from "../quests/QuestManager.js";
-import { Dialogue } from "../ui/Dialogue.js";
+
 import { HUD } from "../ui/HUD.js";
+import { QuestPanel } from "../ui/QuestPanel.js";
 
 
 export class Engine {
@@ -21,6 +22,8 @@ export class Engine {
         this.canvas = canvas;
 
 
+
+        // Core engine systems
 
         this.renderer =
         new Renderer(canvas);
@@ -37,10 +40,14 @@ export class Engine {
 
 
 
+        // World
+
         this.world =
         new World();
 
 
+
+        // Player
 
         this.player =
         new Player(
@@ -52,25 +59,33 @@ export class Engine {
 
 
 
+        // Interaction
+
         this.interaction =
         new Interaction();
 
 
+
+        // Quest systems
 
         this.questManager =
         new QuestManager();
 
 
 
-        this.dialogue =
-        new Dialogue();
-
-
+        // UI
 
         this.hud =
         new HUD();
 
 
+
+        this.questPanel =
+        new QuestPanel();
+
+
+
+        // Loop
 
         this.loop =
         new GameLoop(
@@ -94,9 +109,14 @@ export class Engine {
     update(delta){
 
 
+
+        // Player movement
+
         this.player.update(delta);
 
 
+
+        // Camera tracking
 
         this.camera.follow(
             this.player
@@ -104,12 +124,16 @@ export class Engine {
 
 
 
+        // Check nearby buildings
+
         this.interaction.update(
             this.player,
             this.world.buildings
         );
 
 
+
+        // Show interaction prompt
 
         if(
             this.interaction.canInteract()
@@ -136,6 +160,9 @@ export class Engine {
         }
 
 
+
+
+        // Press E interaction
 
         if(
             this.input.isDown("e") &&
@@ -165,6 +192,12 @@ export class Engine {
                 if(quest){
 
 
+                    this.questPanel.show(
+                        quest
+                    );
+
+
+
                     this.hud.setMessage(
                         "Quest Started: "
                         + quest.title
@@ -185,7 +218,9 @@ export class Engine {
 
 
 
+
     render(){
+
 
 
         this.renderer.clear();
@@ -197,6 +232,8 @@ export class Engine {
 
 
 
+        // World
+
         this.world.draw(
             ctx,
             this.camera,
@@ -204,6 +241,8 @@ export class Engine {
         );
 
 
+
+        // Player
 
         this.player.draw(
             ctx,
@@ -213,7 +252,16 @@ export class Engine {
 
 
 
+        // UI
+
         this.hud.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.questPanel.draw(
             ctx,
             this.canvas
         );

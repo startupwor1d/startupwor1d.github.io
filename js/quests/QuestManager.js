@@ -1,9 +1,14 @@
+import { Quests } from "./quests.js";
+
+
 export class QuestManager {
 
 
     constructor(){
 
+
         this.activeQuest = null;
+
 
     }
 
@@ -12,15 +17,17 @@ export class QuestManager {
     startQuest(id){
 
 
-        if(id === "idea-validation"){
+        if(Quests[id]){
 
 
-            this.activeQuest = {
+            this.activeQuest =
+            {
 
-                title:"Validate Your Startup Idea",
+                ...Quests[id],
 
-                description:
-                "Interview customers and discover a real problem."
+                progress:0,
+
+                completed:false
 
             };
 
@@ -34,7 +41,47 @@ export class QuestManager {
 
     getQuest(){
 
+
         return this.activeQuest;
+
+
+    }
+
+
+
+    completeObjective(){
+
+
+        if(!this.activeQuest)
+            return;
+
+
+
+        this.activeQuest.progress++;
+
+
+
+        if(
+            this.activeQuest.progress >=
+            this.activeQuest.objectives.length
+        ){
+
+
+            this.activeQuest.completed = true;
+
+
+        }
+
+
+    }
+
+
+
+    clearQuest(){
+
+
+        this.activeQuest = null;
+
 
     }
 
