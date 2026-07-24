@@ -78,30 +78,20 @@ export class Engine {
 
     render(){
 
+    this.renderer.clear();
 
-        this.renderer.clear();
+    const ctx = this.renderer.ctx;
 
+    ctx.fillStyle = "red";
 
-        const ctx =
-        this.renderer.ctx;
+    ctx.fillRect(
+        100,
+        100,
+        100,
+        100
+    );
 
-
-
-        this.world.draw(
-            ctx,
-            this.camera,
-            this.canvas
-        );
-
-
-        this.player.draw(
-            ctx,
-            this.camera,
-            this.canvas
-        );
-
-
-    }
+}
 
 
 }
