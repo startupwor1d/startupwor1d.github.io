@@ -2,9 +2,13 @@ import { GameLoop } from "./GameLoop.js";
 import { Renderer } from "./Renderer.js";
 import { Input } from "./Input.js";
 import { Camera } from "./Camera.js";
+import { Interaction } from "./Interaction.js";
 
 import { Player } from "../entities/Player.js";
 import { World } from "../world/World.js";
+
+import { QuestManager } from "../quests/QuestManager.js";
+import { Dialogue } from "../ui/Dialogue.js";
 
 
 export class Engine {
@@ -17,7 +21,7 @@ export class Engine {
 
 
 
-        // Core systems
+        // Core engine
 
         this.renderer =
         new Renderer(canvas);
@@ -32,14 +36,14 @@ export class Engine {
 
 
 
-        // World first
+        // World
 
         this.world =
         new World();
 
 
 
-        // Player needs world for collision
+        // Player
 
         this.player =
         new Player(
@@ -48,6 +52,23 @@ export class Engine {
             this.input,
             this.world
         );
+
+
+
+        // Interaction + quests
+
+        this.interaction =
+        new Interaction();
+
+
+
+        this.questManager =
+        new QuestManager();
+
+
+
+        this.dialogue =
+        new Dialogue();
 
 
 
@@ -75,16 +96,70 @@ export class Engine {
     update(delta){
 
 
+
+        // Player movement
+
         this.player.update(delta);
 
 
+
+        // Camera follows player
 
         this.camera.follow(
             this.player
         );
 
 
+
+        // Check nearby objects
+
+        this.interaction.update(
+            this.player,
+            this.world.buildings
+        );
+
+
+
+        // Interaction button
+
+        if(
+            this.input.isDown("e") &&
+            this.interaction.canInteract()
+        ){
+
+
+            const building =
+            this.interaction.getTarget();
+
+
+
+            if(building.quest){
+
+
+                this.questManager.startQuest(
+                    building.quest
+                );
+
+
+                const quest =
+                this.questManager.getQuest();
+
+
+
+                this.dialogue.show(
+                    "Quest Started: "
+                    + quest.title
+                );
+
+
+            }
+
+
+        }
+
+
     }
+
 
 
 
@@ -99,6 +174,8 @@ export class Engine {
 
 
 
+        // Draw world
+
         this.world.draw(
             ctx,
             this.camera,
@@ -106,6 +183,8 @@ export class Engine {
         );
 
 
+
+        // Draw player
 
         this.player.draw(
             ctx,
