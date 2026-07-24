@@ -1,6 +1,7 @@
 import { Buildings } from "./Buildings.js";
 import { Terrain } from "./Terrain.js";
 import { Roads } from "./Roads.js";
+import { Decorations } from "./Decorations.js";
 
 
 export class World {
@@ -14,12 +15,16 @@ export class World {
 
         this.roads = Roads;
 
+        this.decorations = Decorations;
+
     }
 
 
 
-    draw(ctx,camera,canvas){
+    draw(ctx, camera, canvas){
 
+
+        // 🌱 Terrain
 
         this.terrain.draw(
             ctx,
@@ -28,7 +33,8 @@ export class World {
         );
 
 
-        // roads
+
+        // 🛣 Roads
 
         for(const road of this.roads){
 
@@ -63,16 +69,17 @@ export class World {
 
             ctx.moveTo(
                 pos.x,
-                pos.y + road.height/2
+                pos.y + road.height / 2
             );
+
 
             ctx.lineTo(
                 pos.x + road.width,
-                pos.y + road.height/2
+                pos.y + road.height / 2
             );
 
-            ctx.stroke();
 
+            ctx.stroke();
 
             ctx.setLineDash([]);
 
@@ -80,7 +87,7 @@ export class World {
 
 
 
-        // buildings
+        // 🏢 Buildings
 
         for(const building of this.buildings){
 
@@ -105,6 +112,7 @@ export class World {
             );
 
 
+
             ctx.fillStyle="white";
 
             ctx.font="16px Arial";
@@ -112,11 +120,109 @@ export class World {
 
             ctx.fillText(
                 building.name,
-                pos.x+10,
-                pos.y+25
+                pos.x + 10,
+                pos.y + 25
             );
 
+
         }
+
+
+
+        // 🌳 Decorations
+
+        for(const item of this.decorations){
+
+
+            const pos =
+            camera.worldToScreen(
+                item.x,
+                item.y,
+                canvas
+            );
+
+
+
+            // Trees
+
+            if(item.type === "tree"){
+
+
+                // trunk
+
+                ctx.fillStyle="#8b5a2b";
+
+
+                ctx.fillRect(
+                    pos.x - 5,
+                    pos.y,
+                    10,
+                    25
+                );
+
+
+                // leaves
+
+                ctx.fillStyle="#2ecc71";
+
+
+                ctx.beginPath();
+
+
+                ctx.arc(
+                    pos.x,
+                    pos.y - 10,
+                    25,
+                    0,
+                    Math.PI * 2
+                );
+
+
+                ctx.fill();
+
+            }
+
+
+
+            // Street lamps
+
+            if(item.type === "lamp"){
+
+
+                ctx.fillStyle="#444";
+
+
+                ctx.fillRect(
+                    pos.x - 3,
+                    pos.y,
+                    6,
+                    35
+                );
+
+
+
+                ctx.fillStyle="#ffe66d";
+
+
+                ctx.beginPath();
+
+
+                ctx.arc(
+                    pos.x,
+                    pos.y,
+                    8,
+                    0,
+                    Math.PI * 2
+                );
+
+
+                ctx.fill();
+
+            }
+
+
+        }
+
 
     }
 
