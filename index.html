@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Startup World</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#111;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+canvas{
+    display:block;
+    width:100%;
+    height:100%;
+    cursor:crosshair;
+}
+
+#debug{
+    position:absolute;
+    top:15px;
+    left:15px;
+    color:white;
+    font-size:14px;
+    background:rgba(0,0,0,.5);
+    padding:8px 12px;
+    border-radius:8px;
+    user-select:none;
+}
+</style>
+
+</head>
+<body>
+
+<canvas id="game"></canvas>
+
+<div id="debug"></div>
+
+<script>
+
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+const debug = document.getElementById("debug");
+
+/////////////////////////////////////////////////////////
+
+function resize(){
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+}
+
+window.addEventListener("resize",resize);
+resize();
+
+/////////////////////////////////////////////////////////
+
+const Input={
+
+    keys:{},
+
+    mouse:{
+        x:0,
+        y:0,
+        down:false
+    }
+
+};
+
+window.addEventListener("keydown",e=>{
+    Input.keys[e.key]=true;
+});
+
+window.addEventListener("keyup",e=>{
+    Input.keys[e.key]=false;
+});
+
+window.addEventListener("mousemove",e=>{
+    Input.mouse.x=e.clientX;
+    Input.mouse.y=e.clientY;
+});
+
+window.addEventListener("mousedown",()=>{
+    Input.mouse.down=true;
+});
+
+window.addEventListener("mouseup",()=>{
+    Input.mouse.down=false;
+});
+
+/////////////////////////////////////////////////////////
+
+const Camera={
+
+    x:0,
+    y:0,
+    zoom:1
+
+};
+
+/////////////////////////////////////////////////////////
+
+const Player={
+
+    x:0,
+    y:0,
+    size:30,
+    speed:300
+
+};
+
+/////////////////////////////////////////////////////////
+
+let last=0;
+let fps=0;
+
+function update(dt){
+
+    if(Input.keys["w"]||Input.keys["ArrowUp"])
+        Player.y-=Player.speed*dt;
+
+    if(Input.keys["s"]||Input.keys["ArrowDown"])
+        Player.y+=Player.speed*dt;
+
+    if(Input.keys["a"]||Input.keys["ArrowLeft"])
+        Player.x-=Player.speed*dt;
+
+    if(Input.keys["d"]||Input.keys["ArrowRight"])
+        Player.x+=Player.speed*dt;
+
+    Camera.x=Player.x;
+    Camera.y=Player.y;
+
+}
+
+/////////////////////////////////////////////////////////
+
+function drawGrid(){
+
+    const size=100;
+
+    ctx.strokeStyle="#222";
+    ctx.lineWidth=1;
+
+    const startX=Math.floor((Camera.x-canvas.width/2)/size)*size;
+    const endX=Camera.x+canvas.width;
+
+    const startY=Math.floor((Camera.y-canvas.height/2)/size)*size;
+    const endY=Camera.y+canvas.height;
+
+    for(let x=startX;x<endX;x+=size){
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x-Camera.x+canvas.width/2,
+            0
+        );
+
+        ctx.lineTo(
+            x-Camera.x+canvas.width/2,
+            canvas.height
+        );
+
+        ctx.stroke();
+
+    }
+
+    for(let y=startY;y<endY;y+=size){
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            0,
+            y-Camera.y+canvas.height/2
+        );
+
+        ctx.lineTo(
+            canvas.width,
+            y-Camera.y+canvas.height/2
+        );
+
+        ctx.stroke();
+
+    }
+
+}
+
+/////////////////////////////////////////////////////////
+
+function render(){
+
+    ctx.fillStyle="#111";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    drawGrid();
+
+    const sx=Player.x-Camera.x+canvas.width/2;
+    const sy=Player.y-Camera.y+canvas.height/2;
+
+    ctx.fillStyle="#4ade80";
+
+    ctx.beginPath();
+    ctx.arc(sx,sy,Player.size,0,Math.PI*2);
+    ctx.fill();
+
+    debug.innerHTML=`
+FPS : ${fps}<br>
+Player : ${Player.x.toFixed(0)}, ${Player.y.toFixed(0)}<br>
+Mouse : ${Input.mouse.x}, ${Input.mouse.y}
+`;
+
+}
+
+/////////////////////////////////////////////////////////
+
+function gameLoop(time){
+
+    const dt=(time-last)/1000;
+    last=time;
+
+    fps=Math.round(1/dt);
+
+    update(dt);
+    render();
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+requestAnimationFrame(gameLoop);
+
+</script>
+
+</body>
+</html>
