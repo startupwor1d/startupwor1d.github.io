@@ -9,6 +9,7 @@ import { World } from "../world/World.js";
 
 import { QuestManager } from "../quests/QuestManager.js";
 import { Dialogue } from "../ui/Dialogue.js";
+import { HUD } from "../ui/HUD.js";
 
 
 export class Engine {
@@ -21,14 +22,14 @@ export class Engine {
 
 
 
-        // Core engine
-
         this.renderer =
         new Renderer(canvas);
 
 
+
         this.input =
         new Input();
+
 
 
         this.camera =
@@ -36,14 +37,10 @@ export class Engine {
 
 
 
-        // World
-
         this.world =
         new World();
 
 
-
-        // Player
 
         this.player =
         new Player(
@@ -54,8 +51,6 @@ export class Engine {
         );
 
 
-
-        // Interaction + quests
 
         this.interaction =
         new Interaction();
@@ -72,7 +67,10 @@ export class Engine {
 
 
 
-        // Game loop
+        this.hud =
+        new HUD();
+
+
 
         this.loop =
         new GameLoop(
@@ -96,22 +94,15 @@ export class Engine {
     update(delta){
 
 
-
-        // Player movement
-
         this.player.update(delta);
 
 
-
-        // Camera follows player
 
         this.camera.follow(
             this.player
         );
 
 
-
-        // Check nearby objects
 
         this.interaction.update(
             this.player,
@@ -120,7 +111,31 @@ export class Engine {
 
 
 
-        // Interaction button
+        if(
+            this.interaction.canInteract()
+        ){
+
+
+            const building =
+            this.interaction.getTarget();
+
+
+
+            this.hud.setMessage(
+                "Press E to enter " + building.name
+            );
+
+
+        }
+        else{
+
+
+            this.hud.clear();
+
+
+        }
+
+
 
         if(
             this.input.isDown("e") &&
@@ -141,15 +156,22 @@ export class Engine {
                 );
 
 
+
                 const quest =
                 this.questManager.getQuest();
 
 
 
-                this.dialogue.show(
-                    "Quest Started: "
-                    + quest.title
-                );
+                if(quest){
+
+
+                    this.hud.setMessage(
+                        "Quest Started: "
+                        + quest.title
+                    );
+
+
+                }
 
 
             }
@@ -169,12 +191,11 @@ export class Engine {
         this.renderer.clear();
 
 
+
         const ctx =
         this.renderer.ctx;
 
 
-
-        // Draw world
 
         this.world.draw(
             ctx,
@@ -184,11 +205,16 @@ export class Engine {
 
 
 
-        // Draw player
-
         this.player.draw(
             ctx,
             this.camera,
+            this.canvas
+        );
+
+
+
+        this.hud.draw(
+            ctx,
             this.canvas
         );
 
