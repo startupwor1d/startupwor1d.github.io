@@ -1,5 +1,6 @@
 import { Buildings } from "./Buildings.js";
 import { Terrain } from "./Terrain.js";
+import { Roads } from "./Roads.js";
 
 
 export class World {
@@ -7,14 +8,11 @@ export class World {
 
     constructor(){
 
+        this.buildings = Buildings;
 
-        this.buildings =
-        Buildings;
+        this.terrain = new Terrain();
 
-
-        this.terrain =
-        new Terrain();
-
+        this.roads = Roads;
 
     }
 
@@ -23,13 +21,63 @@ export class World {
     draw(ctx,camera,canvas){
 
 
-        // ground
-
         this.terrain.draw(
             ctx,
             camera,
             canvas
         );
+
+
+        // roads
+
+        for(const road of this.roads){
+
+
+            const pos =
+            camera.worldToScreen(
+                road.x,
+                road.y,
+                canvas
+            );
+
+
+            ctx.fillStyle="#3b3b3b";
+
+
+            ctx.fillRect(
+                pos.x,
+                pos.y,
+                road.width,
+                road.height
+            );
+
+
+            // road markings
+
+            ctx.strokeStyle="#f5d742";
+            ctx.lineWidth=4;
+            ctx.setLineDash([20,20]);
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                pos.x,
+                pos.y + road.height/2
+            );
+
+            ctx.lineTo(
+                pos.x + road.width,
+                pos.y + road.height/2
+            );
+
+            ctx.stroke();
+
+
+            ctx.setLineDash([]);
+
+        }
+
 
 
         // buildings
@@ -45,10 +93,8 @@ export class World {
             );
 
 
-
             ctx.fillStyle =
             building.colour;
-
 
 
             ctx.fillRect(
@@ -57,7 +103,6 @@ export class World {
                 building.width,
                 building.height
             );
-
 
 
             ctx.fillStyle="white";
@@ -71,9 +116,7 @@ export class World {
                 pos.y+25
             );
 
-
         }
-
 
     }
 
