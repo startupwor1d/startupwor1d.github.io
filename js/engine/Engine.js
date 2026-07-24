@@ -13,8 +13,11 @@ export class Engine {
     constructor(canvas){
 
 
-        this.canvas=canvas;
+        this.canvas = canvas;
 
+
+
+        // Core systems
 
         this.renderer =
         new Renderer(canvas);
@@ -29,18 +32,26 @@ export class Engine {
 
 
 
-        this.player =
-        new Player(
-            0,
-            0,
-            this.input
-        );
-
+        // World first
 
         this.world =
         new World();
 
 
+
+        // Player needs world for collision
+
+        this.player =
+        new Player(
+            0,
+            0,
+            this.input,
+            this.world
+        );
+
+
+
+        // Game loop
 
         this.loop =
         new GameLoop(
@@ -67,6 +78,7 @@ export class Engine {
         this.player.update(delta);
 
 
+
         this.camera.follow(
             this.player
         );
@@ -76,28 +88,33 @@ export class Engine {
 
 
 
-   render(){
-
-    this.renderer.clear();
+    render(){
 
 
-    const ctx = this.renderer.ctx;
+        this.renderer.clear();
 
 
-    this.world.draw(
-        ctx,
-        this.camera,
-        this.canvas
-    );
+        const ctx =
+        this.renderer.ctx;
 
 
-    this.player.draw(
-        ctx,
-        this.camera,
-        this.canvas
-    );
 
-}
+        this.world.draw(
+            ctx,
+            this.camera,
+            this.canvas
+        );
+
+
+
+        this.player.draw(
+            ctx,
+            this.camera,
+            this.canvas
+        );
+
+
+    }
 
 
 }

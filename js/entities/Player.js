@@ -1,19 +1,24 @@
 import { Entity } from "./Entity.js";
+import { Collision } from "../engine/Collision.js";
 
 
 export class Player extends Entity {
 
 
-    constructor(x,y,input){
+    constructor(x,y,input,world){
 
         super(x,y);
 
-        this.input=input;
 
-        this.speed=250;
+        this.input = input;
 
-        this.width=30;
-        this.height=30;
+        this.world = world;
+
+        this.speed = 250;
+
+
+        this.width = 30;
+        this.height = 30;
 
     }
 
@@ -22,8 +27,9 @@ export class Player extends Entity {
     update(delta){
 
 
-        let dx=0;
-        let dy=0;
+        let dx = 0;
+        let dy = 0;
+
 
 
         if(this.input.isDown("w"))
@@ -43,10 +49,66 @@ export class Player extends Entity {
 
 
 
-        this.x += dx * this.speed * delta;
+        // test X movement
 
-        this.y += dy * this.speed * delta;
+        let nextX = {
+            x:this.x + dx*this.speed*delta,
+            y:this.y,
+            width:this.width,
+            height:this.height
+        };
 
+
+        if(!this.checkCollision(nextX)){
+
+            this.x = nextX.x;
+
+        }
+
+
+
+        // test Y movement
+
+        let nextY = {
+            x:this.x,
+            y:this.y + dy*this.speed*delta,
+            width:this.width,
+            height:this.height
+        };
+
+
+        if(!this.checkCollision(nextY)){
+
+            this.y = nextY.y;
+
+        }
+
+
+    }
+
+
+
+    checkCollision(player){
+
+
+        for(const building of this.world.buildings){
+
+
+            if(
+                Collision.intersects(
+                    player,
+                    building
+                )
+            ){
+
+                return true;
+
+            }
+
+        }
+
+
+        return false;
 
     }
 
