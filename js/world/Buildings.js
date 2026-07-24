@@ -1,0 +1,42 @@
+export const Buildings = [
+
+    {
+        name:"Idea Lab",
+        x:300,
+        y:100,
+        width:160,
+        height:120,
+        colour:"#ffb703"
+    },
+
+
+    {
+        name:"Builder District",
+        x:-350,
+        y:200,
+        width:200,
+        height:140,
+        colour:"#4cc9f0"
+    },
+
+
+    {
+        name:"Launch Pad",
+        x:250,
+        y:-300,
+        width:180,
+        height:120,
+        colour:"#ef476f"
+    },
+
+
+    {
+        name:"VC Tower",
+        x:-300,
+        y:-300,
+        width:160,
+        height:200,
+        colour:"#8338ec"
+    }
+
+];
