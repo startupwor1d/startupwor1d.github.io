@@ -1,4 +1,5 @@
 import { Buildings } from "./Buildings.js";
+import { Terrain } from "./Terrain.js";
 
 
 export class World {
@@ -6,8 +7,14 @@ export class World {
 
     constructor(){
 
+
         this.buildings =
         Buildings;
+
+
+        this.terrain =
+        new Terrain();
+
 
     }
 
@@ -15,6 +22,17 @@ export class World {
 
     draw(ctx,camera,canvas){
 
+
+        // ground
+
+        this.terrain.draw(
+            ctx,
+            camera,
+            canvas
+        );
+
+
+        // buildings
 
         for(const building of this.buildings){
 
@@ -27,8 +45,10 @@ export class World {
             );
 
 
+
             ctx.fillStyle =
             building.colour;
+
 
 
             ctx.fillRect(
