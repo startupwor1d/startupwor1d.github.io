@@ -3,6 +3,7 @@ import { Terrain } from "./Terrain.js";
 import { Roads } from "./Roads.js";
 import { Decorations } from "./Decorations.js";
 import { NPCs } from "./NPCs.js";
+import { CompanyHQ } from "./CompanyHQ.js";
 
 
 export class World {
@@ -13,13 +14,20 @@ export class World {
 
         this.buildings = Buildings;
 
+
         this.terrain = new Terrain();
+
 
         this.roads = Roads;
 
+
         this.decorations = Decorations;
 
+
         this.npcs = NPCs;
+
+
+        this.companyHQ = CompanyHQ;
 
 
     }
@@ -27,14 +35,20 @@ export class World {
 
 
 
+
     draw(ctx,camera,canvas){
 
+
+
+        // Ground
 
         this.terrain.draw(
             ctx,
             camera,
             canvas
         );
+
+
 
 
 
@@ -51,7 +65,8 @@ export class World {
             );
 
 
-            ctx.fillStyle="#3b3b3b";
+            ctx.fillStyle =
+            "#3b3b3b";
 
 
             ctx.fillRect(
@@ -61,7 +76,10 @@ export class World {
                 road.height
             );
 
+
         }
+
+
 
 
 
@@ -79,8 +97,10 @@ export class World {
             );
 
 
+
             ctx.fillStyle =
-            building.colour;
+            building.colour || "#888";
+
 
 
             ctx.fillRect(
@@ -91,19 +111,24 @@ export class World {
             );
 
 
-            ctx.fillStyle="white";
 
-            ctx.font="16px Arial";
+            ctx.fillStyle =
+            "white";
+
+
+            ctx.font =
+            "16px Arial";
 
 
             ctx.fillText(
                 building.name,
-                pos.x+10,
-                pos.y+25
+                pos.x + 10,
+                pos.y + 25
             );
 
 
         }
+
 
 
 
@@ -122,34 +147,43 @@ export class World {
             );
 
 
-            if(item.type==="tree"){
+
+            if(item.type === "tree"){
 
 
-                ctx.fillStyle="#8b5a2b";
+
+                ctx.fillStyle =
+                "#8b5a2b";
 
 
                 ctx.fillRect(
-                    pos.x-5,
+                    pos.x - 5,
                     pos.y,
                     10,
                     25
                 );
 
 
-                ctx.fillStyle="#2ecc71";
+
+                ctx.fillStyle =
+                "#2ecc71";
 
 
                 ctx.beginPath();
 
+
                 ctx.arc(
                     pos.x,
-                    pos.y-10,
+                    pos.y - 10,
                     25,
                     0,
-                    Math.PI*2
+                    Math.PI * 2
                 );
 
+
                 ctx.fill();
+
+
 
             }
 
@@ -160,9 +194,12 @@ export class World {
 
 
 
+
+
         // NPCs
 
         for(const npc of this.npcs){
+
 
 
             const pos =
@@ -175,7 +212,7 @@ export class World {
 
 
             ctx.fillStyle =
-            npc.colour;
+            npc.colour || "#fff";
 
 
 
@@ -187,7 +224,7 @@ export class World {
                 pos.y,
                 15,
                 0,
-                Math.PI*2
+                Math.PI * 2
             );
 
 
@@ -195,20 +232,78 @@ export class World {
 
 
 
-            ctx.fillStyle="white";
+
+            ctx.fillStyle =
+            "white";
 
 
-            ctx.font="14px Arial";
+            ctx.font =
+            "14px Arial";
 
 
             ctx.fillText(
                 npc.name,
-                pos.x-25,
-                pos.y-25
+                pos.x - 25,
+                pos.y - 25
             );
 
 
         }
+
+
+
+
+
+
+
+
+        // Player company HQ
+
+        if(this.companyHQ.active){
+
+
+
+            const pos =
+            camera.worldToScreen(
+                this.companyHQ.x,
+                this.companyHQ.y,
+                canvas
+            );
+
+
+
+            ctx.fillStyle =
+            this.companyHQ.colour;
+
+
+
+            ctx.fillRect(
+                pos.x,
+                pos.y,
+                this.companyHQ.width,
+                this.companyHQ.height
+            );
+
+
+
+            ctx.fillStyle =
+            "white";
+
+
+            ctx.font =
+            "18px Arial";
+
+
+            ctx.fillText(
+                this.companyHQ.name,
+                pos.x,
+                pos.y - 10
+            );
+
+
+
+        }
+
 
 
     }
