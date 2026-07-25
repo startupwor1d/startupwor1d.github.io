@@ -6,7 +6,7 @@ export class Input {
 
         this.keys = {};
 
-        this.previousKeys = {};
+        this.justPressed = {};
 
 
 
@@ -15,9 +15,20 @@ export class Input {
             (event)=>{
 
 
-                this.keys[
-                    event.key.toLowerCase()
-                ] = true;
+                const key =
+                event.key.toLowerCase();
+
+
+
+                if(!this.keys[key]){
+
+                    this.justPressed[key] = true;
+
+                }
+
+
+
+                this.keys[key] = true;
 
 
             }
@@ -45,11 +56,7 @@ export class Input {
 
     update(){
 
-
-        this.previousKeys = {
-            ...this.keys
-        };
-
+        this.justPressed = {};
 
     }
 
@@ -57,9 +64,7 @@ export class Input {
 
     isDown(key){
 
-
         return !!this.keys[key];
-
 
     }
 
@@ -67,12 +72,7 @@ export class Input {
 
     isPressed(key){
 
-
-        return (
-            this.keys[key] &&
-            !this.previousKeys[key]
-        );
-
+        return !!this.justPressed[key];
 
     }
 
