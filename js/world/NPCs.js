@@ -2,6 +2,7 @@ export const NPCs = [
 
 
     {
+
         name:"Customer",
 
         x:80,
@@ -14,14 +15,19 @@ export const NPCs = [
 
         colour:"#ffffff",
 
-        interact:true,
+        objective:0,
 
-        objective:0
+
+        dialogue:
+        "I waste hours organising my business tasks."
+
 
     },
 
 
+
     {
+
         name:"Founder",
 
         x:-100,
@@ -34,14 +40,19 @@ export const NPCs = [
 
         colour:"#ff99cc",
 
-        interact:true,
+        objective:1,
 
-        objective:1
+
+        dialogue:
+        "Finding customers was harder than building."
+
 
     },
 
 
+
     {
+
         name:"Developer",
 
         x:450,
@@ -54,9 +65,12 @@ export const NPCs = [
 
         colour:"#90be6d",
 
-        interact:true,
+        objective:2,
 
-        objective:2
+
+        dialogue:
+        "I can build the MVP once we know the problem."
+
 
     }
 

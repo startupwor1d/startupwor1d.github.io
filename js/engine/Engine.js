@@ -11,6 +11,7 @@ import { QuestManager } from "../quests/QuestManager.js";
 
 import { HUD } from "../ui/HUD.js";
 import { QuestPanel } from "../ui/QuestPanel.js";
+import { DialogueBox } from "../ui/DialogueBox.js";
 
 
 export class Engine {
@@ -66,7 +67,7 @@ export class Engine {
 
 
 
-        // Quests
+        // Quest systems
 
         this.questManager =
         new QuestManager();
@@ -82,6 +83,11 @@ export class Engine {
 
         this.questPanel =
         new QuestPanel();
+
+
+
+        this.dialogueBox =
+        new DialogueBox();
 
 
 
@@ -116,7 +122,7 @@ export class Engine {
 
 
 
-        // Player
+        // Player movement
 
         this.player.update(delta);
 
@@ -130,7 +136,7 @@ export class Engine {
 
 
 
-        // Find interactive objects
+        // Find nearby interactables
 
         this.interaction.update(
             this.player,
@@ -139,6 +145,71 @@ export class Engine {
                 ...this.world.npcs
             ]
         );
+
+
+
+        // If dialogue is open
+
+        if(
+            this.dialogueBox.visible
+        ){
+
+
+            if(
+                this.input.isPressed("e")
+            ){
+
+
+                const target =
+                this.dialogueBox.target;
+
+
+
+                if(
+                    target &&
+                    target.objective !== undefined
+                ){
+
+
+                    this.questManager.completeObjective(
+                        target.objective
+                    );
+
+
+
+                    const quest =
+                    this.questManager.getQuest();
+
+
+
+                    if(quest){
+
+
+                        this.questPanel.show(
+                            quest
+                        );
+
+
+                    }
+
+
+                }
+
+
+
+                this.dialogueBox.hide();
+
+
+            }
+
+
+
+            return;
+
+
+        }
+
+
 
 
 
@@ -172,6 +243,7 @@ export class Engine {
 
 
 
+
         // Press E
 
         if(
@@ -186,9 +258,11 @@ export class Engine {
 
 
 
-            // Building quest start
+            // Start building quests
 
-            if(target.quest){
+            if(
+                target.quest
+            ){
 
 
                 this.questManager.startQuest(
@@ -225,46 +299,24 @@ export class Engine {
 
 
 
-            // NPC objective completion
+            // NPC dialogue
 
-            if(
-                target.objective !== undefined
+            else if(
+                target.dialogue
             ){
 
 
-                this.questManager.completeObjective(
-                    target.objective
+                this.dialogueBox.show(
+                    target.name,
+                    target.dialogue,
+                    target
                 );
-
-
-
-                const quest =
-                this.questManager.getQuest();
-
-
-
-                if(quest){
-
-
-                    this.questPanel.show(
-                        quest
-                    );
-
-
-                    this.hud.setMessage(
-                        "Objective Complete!"
-                    );
-
-
-                }
 
 
             }
 
 
-
         }
-
 
 
     }
@@ -287,7 +339,7 @@ export class Engine {
 
 
 
-        // World
+        // Draw world
 
         this.world.draw(
             ctx,
@@ -297,7 +349,7 @@ export class Engine {
 
 
 
-        // Player
+        // Draw player
 
         this.player.draw(
             ctx,
@@ -307,7 +359,7 @@ export class Engine {
 
 
 
-        // UI
+        // Draw UI
 
         this.hud.draw(
             ctx,
@@ -317,6 +369,13 @@ export class Engine {
 
 
         this.questPanel.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.dialogueBox.draw(
             ctx,
             this.canvas
         );
