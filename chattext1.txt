@@ -1,0 +1,1446 @@
+im making a gmae like https://coastalworld.merci-michel.com i want to make it around the startup world
+
+That could work really well. One of the reasons the Coastal World experience is memorable is that it doesn't feel like a menu—it feels like you're exploring a living world where every building has a purpose. It uses a playful 3D environment to tell the story of an ecosystem rather than presenting information directly.
+
+For a startup version, I'd think less about a "city" and more about a startup ecosystem.
+
+🌍 World concept: Startup Island
+
+Instead of banks and fintechs, every area represents a stage of building a company.
+
+                🚀 Launch Pad
+                    │
+    💡 Idea Lab ─── 🏙 Startup City ─── 💰 VC District
+                    │
+          👥 Community Square
+                    │
+          🤖 AI Valley
+                    │
+          📈 Growth Mountains
+                    │
+            🦄 Unicorn Castle
+Areas
+💡 Idea Lab
+
+A garage full of inventions.
+
+Interactive objects:
+
+Whiteboards with startup ideas
+Sticky notes you can throw around
+Broken prototypes
+"Validate your idea" mini-game
+🏗 Builder District
+
+Construction cranes are literally building products.
+
+Objects:
+
+Designers drawing wireframes
+Developers coding
+APIs as glowing pipes connecting buildings
+Bugs escaping from computers
+
+Mini game:
+Catch bugs before launch.
+
+🚀 Launch Pad
+
+Rocket launches every few minutes.
+
+Companies preparing to launch.
+
+Interactions:
+
+Countdown timer
+Press launch button
+Product Hunt billboard
+Users flooding in after launch
+💰 VC District
+
+Glass skyscrapers.
+
+Investors walking around.
+
+Interactions:
+
+Pitch elevator
+Term sheet puzzle
+Raise funding
+Avoid "bad investor" NPCs
+
+Hidden easter eggs:
+
+Giant pile of pitch decks
+Coffee everywhere
+👥 Founder Park
+
+Relaxed area.
+
+Founders chatting.
+
+Podcast stage.
+
+Meetups.
+
+Campfire conversations.
+
+Click founders to hear:
+
+biggest mistake
+best advice
+funniest startup story
+🤖 AI Valley
+
+Everything is futuristic.
+
+Robots.
+
+GPU data centres.
+
+Agents walking around completing tasks.
+
+Interactive:
+Build an AI workflow by connecting tools together.
+
+📈 Growth District
+
+Traffic everywhere.
+
+Marketing billboards.
+
+Analytics dashboards.
+
+Funnels.
+
+Mini games:
+
+Scale servers
+Optimise conversion
+Reduce CAC
+Increase retention
+🦄 Unicorn Mountain
+
+Late-game unlock.
+
+Massive headquarters.
+
+Flying unicorn.
+
+IPO bell.
+
+Fun collectibles
+
+Instead of coins:
+
+💰 Funding rounds
+⭐ Product Hunt badges
+🧠 Startup wisdom
+📰 TechCrunch articles
+🎟 Conference badges
+☕ Coffee cups
+🦄 Unicorns
+🛠 Open-source tools
+NPCs
+
+Characters wandering the world:
+
+Solo founder
+Angel investor
+VC partner
+Indie hacker
+Product designer
+Staff engineer
+AI researcher
+Growth marketer
+Community manager
+Journalist
+Customer
+
+Each can have dialogue, quests, or small interactions.
+
+Hidden easter eggs
+A garage that becomes a billion-pound company when you revisit it.
+A server room overheating until you fix scaling.
+A "pivot machine" that transforms one startup into another.
+A graveyard of failed startups with humorous epitaphs.
+A giant rubber duck floating in a lake labelled "Debugging."
+Art style
+
+A low-poly, colourful aesthetic would fit this well:
+
+Bright pastel colours
+Soft lighting
+Stylised trees and buildings
+Tiny animated people
+Floating UI elements
+Minimal text, with discovery through exploration
+A progression loop
+Start in Idea Lab.
+Build your MVP.
+Launch your product.
+Find your first customers.
+Raise funding (or bootstrap).
+Scale your company.
+Expand globally.
+Reach the Unicorn Mountain.
+
+This gives players a clear journey while letting them wander and discover stories, founders, companies, and startup concepts at their own pace—similar to the exploratory feel of Coastal World, but centred on entrepreneurship rather than fintech.
+
+Absolutely. Here is the full copy/paste version of:
+
+js/engine/Engine.js
+
+This version connects:
+
+✅ World
+✅ Player
+✅ Collision
+✅ Camera
+✅ Buildings
+✅ NPCs
+✅ Quests
+✅ Dialogue
+✅ Quest panel
+✅ Founder profile
+✅ Profile panel
+✅ Decision system
+
+import { GameLoop } from "./GameLoop.js";
+import { Renderer } from "./Renderer.js";
+import { Input } from "./Input.js";
+import { Camera } from "./Camera.js";
+import { Interaction } from "./Interaction.js";
+
+import { Player } from "../entities/Player.js";
+import { World } from "../world/World.js";
+
+import { QuestManager } from "../quests/QuestManager.js";
+
+import { HUD } from "../ui/HUD.js";
+import { QuestPanel } from "../ui/QuestPanel.js";
+import { DialogueBox } from "../ui/DialogueBox.js";
+import { ChoicePanel } from "../ui/ChoicePanel.js";
+import { ProfilePanel } from "../ui/ProfilePanel.js";
+
+import { FounderProfile } from "../player/FounderProfile.js";
+
+import { DecisionSystem } from "../systems/DecisionSystem.js";
+import { Problems } from "../data/Problems.js";
+
+
+export class Engine {
+
+
+    constructor(canvas){
+
+
+        this.canvas = canvas;
+
+
+
+        // Core systems
+
+        this.renderer =
+        new Renderer(canvas);
+
+
+
+        this.input =
+        new Input();
+
+
+
+        this.camera =
+        new Camera();
+
+
+
+        // World
+
+        this.world =
+        new World();
+
+
+
+        // Player
+
+        this.player =
+        new Player(
+            0,
+            0,
+            this.input,
+            this.world
+        );
+
+
+
+        // Interaction
+
+        this.interaction =
+        new Interaction();
+
+
+
+        // Quest system
+
+        this.questManager =
+        new QuestManager();
+
+
+
+        // Founder systems
+
+        this.founder =
+        new FounderProfile();
+
+
+
+        this.decisionSystem =
+        new DecisionSystem();
+
+
+
+        // UI
+
+        this.hud =
+        new HUD();
+
+
+
+        this.questPanel =
+        new QuestPanel();
+
+
+
+        this.dialogueBox =
+        new DialogueBox();
+
+
+
+        this.choicePanel =
+        new ChoicePanel();
+
+
+
+        this.profilePanel =
+        new ProfilePanel();
+
+
+
+        // Show profile
+
+        this.profilePanel.show(
+            this.founder
+        );
+
+
+
+        // Game loop
+
+        this.loop =
+        new GameLoop(
+            this.update.bind(this),
+            this.render.bind(this)
+        );
+
+
+    }
+
+
+
+
+
+    start(){
+
+
+        this.loop.start();
+
+
+    }
+
+
+
+
+
+    update(delta){
+
+
+
+        // Player movement
+
+        this.player.update(delta);
+
+
+
+        // Camera
+
+        this.camera.follow(
+            this.player
+        );
+
+
+
+        // Interaction scan
+
+        this.interaction.update(
+            this.player,
+            [
+                ...this.world.buildings,
+                ...this.world.npcs
+            ]
+        );
+
+
+
+        // Dialogue active
+
+        if(
+            this.dialogueBox.visible
+        ){
+
+
+            if(
+                this.input.isPressed("e")
+            ){
+
+
+                const npc =
+                this.dialogueBox.target;
+
+
+
+                if(
+                    npc &&
+                    npc.problem
+                ){
+
+
+                    this.choicePanel.show(
+                        Problems.invoiceProblem
+                    );
+
+
+                }
+                else if(
+                    npc &&
+                    npc.objective !== undefined
+                ){
+
+
+                    this.questManager.completeObjective(
+                        npc.objective
+                    );
+
+
+                    this.questPanel.show(
+                        this.questManager.getQuest()
+                    );
+
+
+                }
+
+
+
+                this.dialogueBox.hide();
+
+
+            }
+
+
+
+            return;
+
+
+        }
+
+
+
+
+
+        // Choice selection
+
+        if(
+            this.choicePanel.visible
+        ){
+
+
+            if(
+                this.input.isPressed("1")
+            ){
+
+
+                const choice =
+                this.choicePanel.problem.choices[0];
+
+
+                this.decisionSystem.makeChoice(
+                    choice,
+                    this.founder
+                );
+
+
+                this.choicePanel.hide();
+
+
+            }
+
+
+
+            if(
+                this.input.isPressed("2")
+            ){
+
+
+                const choice =
+                this.choicePanel.problem.choices[1];
+
+
+                this.decisionSystem.makeChoice(
+                    choice,
+                    this.founder
+                );
+
+
+                this.choicePanel.hide();
+
+
+            }
+
+
+
+            if(
+                this.input.isPressed("3")
+            ){
+
+
+                const choice =
+                this.choicePanel.problem.choices[2];
+
+
+                this.decisionSystem.makeChoice(
+                    choice,
+                    this.founder
+                );
+
+
+                this.choicePanel.hide();
+
+
+            }
+
+
+            return;
+
+
+        }
+
+
+
+
+
+        // Interaction prompt
+
+        if(
+            this.interaction.canInteract()
+        ){
+
+
+            const target =
+            this.interaction.getTarget();
+
+
+
+            this.hud.setMessage(
+                "Press E to interact with "
+                +
+                target.name
+            );
+
+
+        }
+        else{
+
+
+            this.hud.clear();
+
+
+        }
+
+
+
+
+
+        // E interaction
+
+        if(
+            this.input.isPressed("e") &&
+            this.interaction.canInteract()
+        ){
+
+
+            const target =
+            this.interaction.getTarget();
+
+
+
+            // Building quest
+
+            if(
+                target.quest
+            ){
+
+
+                this.questManager.startQuest(
+                    target.quest
+                );
+
+
+
+                const quest =
+                this.questManager.getQuest();
+
+
+
+                this.questPanel.show(
+                    quest
+                );
+
+
+            }
+
+
+
+            // NPC
+
+            else if(
+                target.dialogue
+            ){
+
+
+                this.dialogueBox.show(
+                    target.name,
+                    target.dialogue,
+                    target
+                );
+
+
+            }
+
+
+        }
+
+
+    }
+
+
+
+
+
+    render(){
+
+
+
+        this.renderer.clear();
+
+
+
+        const ctx =
+        this.renderer.ctx;
+
+
+
+        this.world.draw(
+            ctx,
+            this.camera,
+            this.canvas
+        );
+
+
+
+        this.player.draw(
+            ctx,
+            this.camera,
+            this.canvas
+        );
+
+
+
+        this.hud.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.questPanel.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.dialogueBox.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.choicePanel.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.profilePanel.draw(
+            ctx,
+            this.canvas
+        );
+
+
+    }
+
+
+}
+
+After this update the intended flow is:
+
+Idea Lab
+   ↓
+Start quest
+   ↓
+Customer NPC
+   ↓
+Dialogue
+   ↓
+Choose:
+1 / 2 / 3
+   ↓
+Founder stats change
+   ↓
+Profile panel updates
+
+Next we should update NPCs.js so customers can actually trigger the startup problem choices. Right now the engine expects npc.problem, so we need to add that data. 🚀
+
+ok
+
+Great. 🚀 Now we connect the NPCs to the startup decision system.
+
+At the moment the engine is looking for:
+
+npc.problem
+
+so we need to update the NPC data.
+
+This will make:
+
+👤 Customer
+
+Press E
+
+↓
+
+"I struggle managing invoices"
+
+↓
+
+Choose your startup idea:
+1. Build AI accounting assistant
+2. Build accountant marketplace
+3. Ignore the problem
+FILE:
+js/world/NPCs.js
+
+Replace the whole file:
+
+export const NPCs = [
+
+
+    {
+        name:"Customer",
+
+        x:80,
+
+        y:250,
+
+        width:30,
+
+        height:30,
+
+        colour:"#ffffff",
+
+
+        dialogue:
+        "I waste hours every week managing invoices and paperwork.",
+
+
+        problem:"invoiceProblem"
+
+
+    },
+
+
+    {
+        name:"Founder",
+
+        x:-100,
+
+        y:150,
+
+        width:30,
+
+        height:30,
+
+        colour:"#ff99cc",
+
+
+        dialogue:
+        "Finding the right problem is the hardest part of building a startup.",
+
+
+        objective:0
+
+
+    },
+
+
+    {
+        name:"Developer",
+
+        x:450,
+
+        y:120,
+
+        width:30,
+
+        height:30,
+
+        colour:"#90be6d",
+
+
+        dialogue:
+        "I can help build the MVP once we understand the customer.",
+
+
+        objective:2
+
+
+    }
+
+
+];
+Important small update
+
+In:
+
+js/engine/Engine.js
+
+Find this section:
+
+if(
+    npc &&
+    npc.problem
+){
+
+
+    this.choicePanel.show(
+        Problems.invoiceProblem
+    );
+
+
+}
+
+Replace it with:
+
+if(
+    npc &&
+    npc.problem
+){
+
+
+    this.choicePanel.show(
+        Problems[npc.problem]
+    );
+
+
+}
+
+Now every NPC can have a different startup problem later.
+
+Example:
+
+problem:"healthcareProblem"
+
+or:
+
+problem:"educationProblem"
+
+Test:
+
+Refresh.
+Walk to Customer.
+Press E.
+Press E again.
+You should see the choice panel.
+
+The world loop is now:
+
+Explore
+ ↓
+Discover problem
+ ↓
+Make startup decision
+ ↓
+Change founder stats
+ ↓
+Build company
+
+Next upgrade: we add a Startup HQ building where your company lives, and your choices begin changing the city. 🏢🚀
+
+re write engine.js
+
+Absolutely. Here is the full copy/paste version of:
+
+js/engine/Engine.js
+
+This version matches the latest systems:
+
+✅ World
+✅ Player
+✅ Camera
+✅ Buildings
+✅ NPCs
+✅ Quests
+✅ Dialogue
+✅ Startup choices
+✅ Founder profile
+✅ Decision system
+✅ Profile panel
+
+import { GameLoop } from "./GameLoop.js";
+import { Renderer } from "./Renderer.js";
+import { Input } from "./Input.js";
+import { Camera } from "./Camera.js";
+import { Interaction } from "./Interaction.js";
+
+import { Player } from "../entities/Player.js";
+import { World } from "../world/World.js";
+
+import { QuestManager } from "../quests/QuestManager.js";
+
+import { HUD } from "../ui/HUD.js";
+import { QuestPanel } from "../ui/QuestPanel.js";
+import { DialogueBox } from "../ui/DialogueBox.js";
+import { ChoicePanel } from "../ui/ChoicePanel.js";
+import { ProfilePanel } from "../ui/ProfilePanel.js";
+
+import { FounderProfile } from "../player/FounderProfile.js";
+
+import { DecisionSystem } from "../systems/DecisionSystem.js";
+
+import { Problems } from "../data/Problems.js";
+
+
+export class Engine {
+
+
+    constructor(canvas){
+
+
+        this.canvas = canvas;
+
+
+
+        // Engine systems
+
+        this.renderer =
+        new Renderer(canvas);
+
+
+
+        this.input =
+        new Input();
+
+
+
+        this.camera =
+        new Camera();
+
+
+
+        // World
+
+        this.world =
+        new World();
+
+
+
+        // Player
+
+        this.player =
+        new Player(
+            0,
+            0,
+            this.input,
+            this.world
+        );
+
+
+
+        // Interaction
+
+        this.interaction =
+        new Interaction();
+
+
+
+        // Quest system
+
+        this.questManager =
+        new QuestManager();
+
+
+
+        // Startup systems
+
+        this.founder =
+        new FounderProfile();
+
+
+
+        this.decisionSystem =
+        new DecisionSystem();
+
+
+
+        // UI
+
+        this.hud =
+        new HUD();
+
+
+
+        this.questPanel =
+        new QuestPanel();
+
+
+
+        this.dialogueBox =
+        new DialogueBox();
+
+
+
+        this.choicePanel =
+        new ChoicePanel();
+
+
+
+        this.profilePanel =
+        new ProfilePanel();
+
+
+
+        this.profilePanel.show(
+            this.founder
+        );
+
+
+
+        // Loop
+
+        this.loop =
+        new GameLoop(
+            this.update.bind(this),
+            this.render.bind(this)
+        );
+
+
+    }
+
+
+
+
+
+    start(){
+
+
+        this.loop.start();
+
+
+    }
+
+
+
+
+
+    update(delta){
+
+
+
+        this.player.update(delta);
+
+
+
+        this.camera.follow(
+            this.player
+        );
+
+
+
+        this.interaction.update(
+            this.player,
+            [
+                ...this.world.buildings,
+                ...this.world.npcs
+            ]
+        );
+
+
+
+        // Dialogue handling
+
+        if(
+            this.dialogueBox.visible
+        ){
+
+
+            if(
+                this.input.isPressed("e")
+            ){
+
+
+                const npc =
+                this.dialogueBox.target;
+
+
+
+                if(
+                    npc &&
+                    npc.problem
+                ){
+
+
+                    this.choicePanel.show(
+                        Problems[npc.problem]
+                    );
+
+
+                }
+
+
+                else if(
+                    npc &&
+                    npc.objective !== undefined
+                ){
+
+
+                    this.questManager.completeObjective(
+                        npc.objective
+                    );
+
+
+                    const quest =
+                    this.questManager.getQuest();
+
+
+
+                    if(quest){
+
+                        this.questPanel.show(
+                            quest
+                        );
+
+                    }
+
+
+                }
+
+
+
+                this.dialogueBox.hide();
+
+
+            }
+
+
+
+            return;
+
+
+        }
+
+
+
+
+
+        // Choice system
+
+        if(
+            this.choicePanel.visible
+        ){
+
+
+            if(
+                this.input.isPressed("1")
+            ){
+
+
+                this.makeDecision(0);
+
+
+            }
+
+
+
+            if(
+                this.input.isPressed("2")
+            ){
+
+
+                this.makeDecision(1);
+
+
+            }
+
+
+
+            if(
+                this.input.isPressed("3")
+            ){
+
+
+                this.makeDecision(2);
+
+
+            }
+
+
+
+            return;
+
+
+        }
+
+
+
+
+
+        // Interaction message
+
+        if(
+            this.interaction.canInteract()
+        ){
+
+
+            const target =
+            this.interaction.getTarget();
+
+
+
+            this.hud.setMessage(
+                "Press E to interact with "
+                +
+                target.name
+            );
+
+
+        }
+        else{
+
+
+            this.hud.clear();
+
+
+        }
+
+
+
+
+
+        // Interaction button
+
+        if(
+            this.input.isPressed("e") &&
+            this.interaction.canInteract()
+        ){
+
+
+            const target =
+            this.interaction.getTarget();
+
+
+
+            // Start quest building
+
+            if(
+                target.quest
+            ){
+
+
+                this.questManager.startQuest(
+                    target.quest
+                );
+
+
+
+                const quest =
+                this.questManager.getQuest();
+
+
+
+                this.questPanel.show(
+                    quest
+                );
+
+
+            }
+
+
+
+            // NPC conversation
+
+            else if(
+                target.dialogue
+            ){
+
+
+                this.dialogueBox.show(
+                    target.name,
+                    target.dialogue,
+                    target
+                );
+
+
+            }
+
+
+        }
+
+
+    }
+
+
+
+
+
+    makeDecision(index){
+
+
+        const problem =
+        this.choicePanel.problem;
+
+
+
+        if(!problem)
+            return;
+
+
+
+        const choice =
+        problem.choices[index];
+
+
+
+        if(choice){
+
+
+            this.decisionSystem.makeChoice(
+                choice,
+                this.founder
+            );
+
+
+        }
+
+
+
+        this.choicePanel.hide();
+
+
+    }
+
+
+
+
+
+    render(){
+
+
+
+        this.renderer.clear();
+
+
+
+        const ctx =
+        this.renderer.ctx;
+
+
+
+        this.world.draw(
+            ctx,
+            this.camera,
+            this.canvas
+        );
+
+
+
+        this.player.draw(
+            ctx,
+            this.camera,
+            this.canvas
+        );
+
+
+
+        this.hud.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.questPanel.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.dialogueBox.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.choicePanel.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.profilePanel.draw(
+            ctx,
+            this.canvas
+        );
+
+
+    }
+
+
+}
+
+After this update the test flow should be:
+
+Walk to Idea Lab
+Press E → quest starts
+Walk to Customer
+Press E → dialogue opens
+Press E → choices appear
+Press 1 / 2 / 3
+Founder Profile updates
+
+Next we can add the Startup HQ + company creation system, where the chosen idea becomes an actual company in the city. 🚀
