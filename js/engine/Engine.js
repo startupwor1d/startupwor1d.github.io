@@ -12,6 +12,14 @@ import { QuestManager } from "../quests/QuestManager.js";
 import { HUD } from "../ui/HUD.js";
 import { QuestPanel } from "../ui/QuestPanel.js";
 import { DialogueBox } from "../ui/DialogueBox.js";
+import { ChoicePanel } from "../ui/ChoicePanel.js";
+import { ProfilePanel } from "../ui/ProfilePanel.js";
+
+import { FounderProfile } from "../player/FounderProfile.js";
+
+import { DecisionSystem } from "../systems/DecisionSystem.js";
+
+import { Problems } from "../data/Problems.js";
 
 
 export class Engine {
@@ -24,7 +32,7 @@ export class Engine {
 
 
 
-        // Core systems
+        // Engine systems
 
         this.renderer =
         new Renderer(canvas);
@@ -67,10 +75,22 @@ export class Engine {
 
 
 
-        // Quest systems
+        // Quest system
 
         this.questManager =
         new QuestManager();
+
+
+
+        // Startup systems
+
+        this.founder =
+        new FounderProfile();
+
+
+
+        this.decisionSystem =
+        new DecisionSystem();
 
 
 
@@ -91,7 +111,23 @@ export class Engine {
 
 
 
-        // Game loop
+        this.choicePanel =
+        new ChoicePanel();
+
+
+
+        this.profilePanel =
+        new ProfilePanel();
+
+
+
+        this.profilePanel.show(
+            this.founder
+        );
+
+
+
+        // Loop
 
         this.loop =
         new GameLoop(
@@ -122,21 +158,15 @@ export class Engine {
 
 
 
-        // Player movement
-
         this.player.update(delta);
 
 
-
-        // Camera
 
         this.camera.follow(
             this.player
         );
 
 
-
-        // Find nearby interactables
 
         this.interaction.update(
             this.player,
@@ -148,7 +178,7 @@ export class Engine {
 
 
 
-        // If dialogue is open
+        // Dialogue handling
 
         if(
             this.dialogueBox.visible
@@ -160,21 +190,34 @@ export class Engine {
             ){
 
 
-                const target =
+                const npc =
                 this.dialogueBox.target;
 
 
 
                 if(
-                    target &&
-                    target.objective !== undefined
+                    npc &&
+                    npc.problem
+                ){
+
+
+                    this.choicePanel.show(
+                        Problems[npc.problem]
+                    );
+
+
+                }
+
+
+                else if(
+                    npc &&
+                    npc.objective !== undefined
                 ){
 
 
                     this.questManager.completeObjective(
-                        target.objective
+                        npc.objective
                     );
-
 
 
                     const quest =
@@ -184,11 +227,9 @@ export class Engine {
 
                     if(quest){
 
-
                         this.questPanel.show(
                             quest
                         );
-
 
                     }
 
@@ -213,7 +254,59 @@ export class Engine {
 
 
 
-        // Interaction prompt
+        // Choice system
+
+        if(
+            this.choicePanel.visible
+        ){
+
+
+            if(
+                this.input.isPressed("1")
+            ){
+
+
+                this.makeDecision(0);
+
+
+            }
+
+
+
+            if(
+                this.input.isPressed("2")
+            ){
+
+
+                this.makeDecision(1);
+
+
+            }
+
+
+
+            if(
+                this.input.isPressed("3")
+            ){
+
+
+                this.makeDecision(2);
+
+
+            }
+
+
+
+            return;
+
+
+        }
+
+
+
+
+
+        // Interaction message
 
         if(
             this.interaction.canInteract()
@@ -227,7 +320,8 @@ export class Engine {
 
             this.hud.setMessage(
                 "Press E to interact with "
-                + target.name
+                +
+                target.name
             );
 
 
@@ -244,7 +338,7 @@ export class Engine {
 
 
 
-        // Press E
+        // Interaction button
 
         if(
             this.input.isPressed("e") &&
@@ -257,8 +351,7 @@ export class Engine {
 
 
 
-
-            // Start building quests
+            // Start quest building
 
             if(
                 target.quest
@@ -276,30 +369,16 @@ export class Engine {
 
 
 
-                if(quest){
-
-
-                    this.questPanel.show(
-                        quest
-                    );
-
-
-                    this.hud.setMessage(
-                        "Quest Started: "
-                        + quest.title
-                    );
-
-
-                }
+                this.questPanel.show(
+                    quest
+                );
 
 
             }
 
 
 
-
-
-            // NPC dialogue
+            // NPC conversation
 
             else if(
                 target.dialogue
@@ -325,6 +404,45 @@ export class Engine {
 
 
 
+    makeDecision(index){
+
+
+        const problem =
+        this.choicePanel.problem;
+
+
+
+        if(!problem)
+            return;
+
+
+
+        const choice =
+        problem.choices[index];
+
+
+
+        if(choice){
+
+
+            this.decisionSystem.makeChoice(
+                choice,
+                this.founder
+            );
+
+
+        }
+
+
+
+        this.choicePanel.hide();
+
+
+    }
+
+
+
+
 
     render(){
 
@@ -339,8 +457,6 @@ export class Engine {
 
 
 
-        // Draw world
-
         this.world.draw(
             ctx,
             this.camera,
@@ -349,8 +465,6 @@ export class Engine {
 
 
 
-        // Draw player
-
         this.player.draw(
             ctx,
             this.camera,
@@ -358,8 +472,6 @@ export class Engine {
         );
 
 
-
-        // Draw UI
 
         this.hud.draw(
             ctx,
@@ -376,6 +488,20 @@ export class Engine {
 
 
         this.dialogueBox.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.choicePanel.draw(
+            ctx,
+            this.canvas
+        );
+
+
+
+        this.profilePanel.draw(
             ctx,
             this.canvas
         );
