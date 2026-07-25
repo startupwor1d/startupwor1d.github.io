@@ -23,7 +23,7 @@ export class Engine {
 
 
 
-        // Core engine systems
+        // Core systems
 
         this.renderer =
         new Renderer(canvas);
@@ -85,7 +85,7 @@ export class Engine {
 
 
 
-        // Loop
+        // Main loop
 
         this.loop =
         new GameLoop(
@@ -98,25 +98,35 @@ export class Engine {
 
 
 
+
     start(){
+
 
         this.loop.start();
 
+
     }
+
+
 
 
 
     update(delta){
 
 
+        // Update input state
 
-        // Player movement
+        this.input.update();
+
+
+
+        // Update player
 
         this.player.update(delta);
 
 
 
-        // Camera tracking
+        // Camera follows player
 
         this.camera.follow(
             this.player
@@ -124,7 +134,7 @@ export class Engine {
 
 
 
-        // Check nearby buildings
+        // Find nearby interactive objects
 
         this.interaction.update(
             this.player,
@@ -133,7 +143,7 @@ export class Engine {
 
 
 
-        // Show interaction prompt
+        // Interaction prompt
 
         if(
             this.interaction.canInteract()
@@ -162,10 +172,11 @@ export class Engine {
 
 
 
-        // Press E interaction
+
+        // Press E once
 
         if(
-            this.input.isDown("e") &&
+            this.input.isPressed("e") &&
             this.interaction.canInteract()
         ){
 
@@ -199,8 +210,8 @@ export class Engine {
 
 
                     this.hud.setMessage(
-                        "Quest Started: "
-                        + quest.title
+                        "Quest Started: " +
+                        quest.title
                     );
 
 
@@ -219,8 +230,8 @@ export class Engine {
 
 
 
-    render(){
 
+    render(){
 
 
         this.renderer.clear();
@@ -232,7 +243,7 @@ export class Engine {
 
 
 
-        // World
+        // Draw world
 
         this.world.draw(
             ctx,
@@ -242,7 +253,7 @@ export class Engine {
 
 
 
-        // Player
+        // Draw player
 
         this.player.draw(
             ctx,
@@ -252,7 +263,7 @@ export class Engine {
 
 
 
-        // UI
+        // Draw UI
 
         this.hud.draw(
             ctx,
