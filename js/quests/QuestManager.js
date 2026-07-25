@@ -20,12 +20,13 @@ export class QuestManager {
         if(Quests[id]){
 
 
-            this.activeQuest =
-            {
+            this.activeQuest = {
 
                 ...Quests[id],
 
-                progress:0,
+                progress: 0,
+
+                completedObjectives: [],
 
                 completed:false
 
@@ -39,6 +40,8 @@ export class QuestManager {
 
 
 
+
+
     getQuest(){
 
 
@@ -49,7 +52,9 @@ export class QuestManager {
 
 
 
-    completeObjective(){
+
+
+    completeObjective(index){
 
 
         if(!this.activeQuest)
@@ -57,7 +62,24 @@ export class QuestManager {
 
 
 
-        this.activeQuest.progress++;
+        if(
+            this.activeQuest.completedObjectives.includes(index)
+        ){
+
+            return;
+
+        }
+
+
+
+        this.activeQuest.completedObjectives.push(
+            index
+        );
+
+
+
+        this.activeQuest.progress =
+        this.activeQuest.completedObjectives.length;
 
 
 
@@ -74,6 +96,24 @@ export class QuestManager {
 
 
     }
+
+
+
+
+
+    isComplete(){
+
+
+        if(!this.activeQuest)
+            return false;
+
+
+        return this.activeQuest.completed;
+
+
+    }
+
+
 
 
 

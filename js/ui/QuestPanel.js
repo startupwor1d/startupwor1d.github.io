@@ -6,22 +6,20 @@ export class QuestPanel {
 
         this.quest = null;
 
-
         this.visible = false;
 
 
         this.closeButton = {
 
-            x: 0,
+            x:0,
 
-            y: 0,
+            y:0,
 
-            width: 40,
+            width:40,
 
-            height: 40
+            height:40
 
         };
-
 
 
         window.addEventListener(
@@ -34,25 +32,30 @@ export class QuestPanel {
 
 
 
-                const x =
+                const mouseX =
                 event.clientX;
 
 
-                const y =
+                const mouseY =
                 event.clientY;
 
 
 
                 if(
-                    x >= this.closeButton.x &&
-                    x <= this.closeButton.x + this.closeButton.width &&
-                    y >= this.closeButton.y &&
-                    y <= this.closeButton.y + this.closeButton.height
+
+                    mouseX >= this.closeButton.x &&
+
+                    mouseX <= this.closeButton.x +
+                    this.closeButton.width &&
+
+                    mouseY >= this.closeButton.y &&
+
+                    mouseY <= this.closeButton.y +
+                    this.closeButton.height
+
                 ){
 
-
                     this.hide();
-
 
                 }
 
@@ -93,10 +96,13 @@ export class QuestPanel {
 
 
 
-    draw(ctx, canvas){
+    draw(ctx,canvas){
 
 
-        if(!this.visible || !this.quest)
+        if(
+            !this.visible ||
+            !this.quest
+        )
             return;
 
 
@@ -105,13 +111,11 @@ export class QuestPanel {
 
         const y = 30;
 
-        const width = 430;
+        const width = 460;
 
-        const height = 260;
+        const height = 320;
 
 
-
-        // panel
 
         ctx.fillStyle =
         "rgba(0,0,0,0.85)";
@@ -126,7 +130,7 @@ export class QuestPanel {
 
 
 
-        // close button position
+        // Close button
 
         this.closeButton.x =
         x + width - 50;
@@ -136,8 +140,6 @@ export class QuestPanel {
         y + 10;
 
 
-
-        // close button
 
         ctx.fillStyle="#e63946";
 
@@ -164,7 +166,7 @@ export class QuestPanel {
 
 
 
-        // title
+        // Title
 
         ctx.fillStyle="#ffcc00";
 
@@ -173,55 +175,100 @@ export class QuestPanel {
 
         ctx.fillText(
             this.quest.title,
-            x + 20,
-            y + 45
+            x+20,
+            y+45
         );
 
 
 
-        // description
+        // Description
 
         ctx.fillStyle="white";
 
-        ctx.font="16px Arial";
+        ctx.font="15px Arial";
 
 
         ctx.fillText(
             this.quest.description,
-            x + 20,
-            y + 80
+            x+20,
+            y+80
         );
 
 
 
-        // objectives
+        // Progress
 
         ctx.fillStyle="#00ff88";
 
+        ctx.font="18px Arial";
+
 
         ctx.fillText(
-            "Objectives:",
-            x + 20,
-            y + 125
+            "Progress: "
+            +
+            this.quest.progress
+            +
+            "/"
+            +
+            this.quest.objectives.length,
+            x+20,
+            y+115
         );
 
 
 
-        ctx.fillStyle="white";
+        // Objectives
+
+        ctx.font="16px Arial";
 
 
         this.quest.objectives.forEach(
             (objective,index)=>{
 
 
+                const complete =
+                this.quest.completedObjectives.includes(index);
+
+
+
+                ctx.fillStyle =
+                complete
+                ? "#00ff88"
+                : "white";
+
+
+
                 ctx.fillText(
-                    "□ " + objective,
-                    x + 35,
-                    y + 160 + (index * 25)
+
+                    (complete ? "☑ " : "☐ ")
+                    +
+                    objective,
+
+                    x+35,
+
+                    y+155+(index*30)
+
                 );
 
 
             }
+        );
+
+
+
+        // Reward
+
+        ctx.fillStyle="#ffd166";
+
+
+        ctx.fillText(
+            "Reward: +" +
+            this.quest.reward.xp +
+            " XP   +" +
+            this.quest.reward.reputation +
+            " Reputation",
+            x+20,
+            y+275
         );
 
 
