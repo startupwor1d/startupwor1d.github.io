@@ -66,7 +66,7 @@ export class Engine {
 
 
 
-        // Quest systems
+        // Quests
 
         this.questManager =
         new QuestManager();
@@ -85,7 +85,7 @@ export class Engine {
 
 
 
-        // Main loop
+        // Game loop
 
         this.loop =
         new GameLoop(
@@ -116,13 +116,13 @@ export class Engine {
 
 
 
-        // Player movement
+        // Player
 
         this.player.update(delta);
 
 
 
-        // Camera follows player
+        // Camera
 
         this.camera.follow(
             this.player
@@ -130,29 +130,33 @@ export class Engine {
 
 
 
-        // Check nearby buildings
+        // Find interactive objects
 
         this.interaction.update(
             this.player,
-            this.world.buildings
+            [
+                ...this.world.buildings,
+                ...this.world.npcs
+            ]
         );
 
 
 
-        // Show interaction prompt
+        // Interaction prompt
 
         if(
             this.interaction.canInteract()
         ){
 
 
-            const building =
+            const target =
             this.interaction.getTarget();
 
 
 
             this.hud.setMessage(
-                "Press E to enter " + building.name
+                "Press E to interact with "
+                + target.name
             );
 
 
@@ -168,8 +172,7 @@ export class Engine {
 
 
 
-
-        // Press E once
+        // Press E
 
         if(
             this.input.isPressed("e") &&
@@ -177,16 +180,19 @@ export class Engine {
         ){
 
 
-            const building =
+            const target =
             this.interaction.getTarget();
 
 
 
-            if(building.quest){
+
+            // Building quest start
+
+            if(target.quest){
 
 
                 this.questManager.startQuest(
-                    building.quest
+                    target.quest
                 );
 
 
@@ -204,10 +210,9 @@ export class Engine {
                     );
 
 
-
                     this.hud.setMessage(
-                        "Quest Started: " +
-                        quest.title
+                        "Quest Started: "
+                        + quest.title
                     );
 
 
@@ -217,11 +222,52 @@ export class Engine {
             }
 
 
+
+
+
+            // NPC objective completion
+
+            if(
+                target.objective !== undefined
+            ){
+
+
+                this.questManager.completeObjective(
+                    target.objective
+                );
+
+
+
+                const quest =
+                this.questManager.getQuest();
+
+
+
+                if(quest){
+
+
+                    this.questPanel.show(
+                        quest
+                    );
+
+
+                    this.hud.setMessage(
+                        "Objective Complete!"
+                    );
+
+
+                }
+
+
+            }
+
+
+
         }
 
 
-    }
 
+    }
 
 
 
@@ -241,7 +287,7 @@ export class Engine {
 
 
 
-        // Draw world
+        // World
 
         this.world.draw(
             ctx,
@@ -251,7 +297,7 @@ export class Engine {
 
 
 
-        // Draw player
+        // Player
 
         this.player.draw(
             ctx,
@@ -261,7 +307,7 @@ export class Engine {
 
 
 
-        // Draw HUD
+        // UI
 
         this.hud.draw(
             ctx,
@@ -269,8 +315,6 @@ export class Engine {
         );
 
 
-
-        // Draw quest panel
 
         this.questPanel.draw(
             ctx,

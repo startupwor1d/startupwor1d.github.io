@@ -11,10 +11,11 @@ export class Interaction {
 
 
 
-    update(player, objects){
+    update(player,objects){
 
 
         this.nearby = null;
+
 
 
         for(const object of objects){
@@ -28,6 +29,7 @@ export class Interaction {
             player.y - object.y;
 
 
+
             const distance =
             Math.sqrt(
                 dx*dx + dy*dy
@@ -37,29 +39,40 @@ export class Interaction {
 
             if(distance < this.distance){
 
+
                 this.nearby = object;
 
-                break;
+                return;
+
 
             }
 
+
         }
 
+
     }
+
 
 
 
     canInteract(){
 
+
         return this.nearby !== null;
+
 
     }
 
 
 
+
+
     getTarget(){
 
+
         return this.nearby;
+
 
     }
 
