@@ -99,6 +99,7 @@ export class Engine {
 
 
 
+
     start(){
 
 
@@ -114,13 +115,8 @@ export class Engine {
     update(delta){
 
 
-        // Update input state
 
-        this.input.update();
-
-
-
-        // Update player
+        // Player movement
 
         this.player.update(delta);
 
@@ -134,7 +130,7 @@ export class Engine {
 
 
 
-        // Find nearby interactive objects
+        // Check nearby buildings
 
         this.interaction.update(
             this.player,
@@ -143,7 +139,7 @@ export class Engine {
 
 
 
-        // Interaction prompt
+        // Show interaction prompt
 
         if(
             this.interaction.canInteract()
@@ -231,7 +227,9 @@ export class Engine {
 
 
 
+
     render(){
+
 
 
         this.renderer.clear();
@@ -263,7 +261,7 @@ export class Engine {
 
 
 
-        // Draw UI
+        // Draw HUD
 
         this.hud.draw(
             ctx,
@@ -271,6 +269,8 @@ export class Engine {
         );
 
 
+
+        // Draw quest panel
 
         this.questPanel.draw(
             ctx,
