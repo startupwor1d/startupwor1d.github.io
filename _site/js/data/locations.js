@@ -1,0 +1,1 @@
+export const LOCATIONS=[{id:"home",name:"Founder Home",x:520,y:250},{id:"coffee_shop",name:"The Daily Grind",x:910,y:445},{id:"startup_hq",name:"Startup HQ",x:1430,y:320},{id:"restaurant",name:"Founders Kitchen",x:1720,y:755},{id:"gym",name:"City Gym",x:1980,y:1180},{id:"vc_tower",name:"VC Tower",x:1010,y:790},{id:"coworking",name:"CoWork Central",x:445,y:1190}];

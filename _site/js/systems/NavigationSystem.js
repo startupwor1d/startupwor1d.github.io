@@ -1,0 +1,1 @@
+export class NavigationSystem{constructor(w){this.world=w}update(){}isBlocked(x,y,r){return this.world.isBlocked(x,y,r)}getLocation(id){return this.world.locations.find(l=>l.id===id)}getScheduleEntry(s,m){if(!s?.length)return null;let c=s[0];for(const e of s){const[a,b]=e.start.split(":").map(Number);if(m>=a*60+b)c=e}return c}}

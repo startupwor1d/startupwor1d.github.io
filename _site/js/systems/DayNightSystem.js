@@ -1,0 +1,1 @@
+export class DayNightSystem{attach(t){this.time=t}update(){}draw(ctx){let o=this.time?.period==="night"?"rgba(20,35,80,.42)":this.time?.period==="evening"?"rgba(255,130,60,.16)":"rgba(255,255,255,0)";ctx.fillStyle=o;ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height)}}

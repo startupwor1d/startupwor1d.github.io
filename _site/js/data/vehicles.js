@@ -1,0 +1,1 @@
+export const VEHICLE_DATA=[{id:"car1",x:100,y:430,direction:"right",speed:100,color:"#ef6a5b"},{id:"car2",x:1800,y:470,direction:"left",speed:80,color:"#4c78d4"},{id:"bus1",x:1050,y:50,direction:"down",speed:55,color:"#e8c24b"},{id:"bike1",x:300,y:1090,direction:"right",speed:70,color:"#45a66b"}];

@@ -1,0 +1,1 @@
+export class EntityManager{constructor(){this.items=[]}add(e){this.items.push(e);return e}getPlayer(){return this.items.find(e=>e.type==="player")}getNPCs(){return this.items.filter(e=>e.type==="npc")}update(dt){for(const e of this.items)if(e.active)e.update(dt)}draw(ctx,c){for(const e of this.items.filter(e=>e.active).sort((a,b)=>a.y-b.y))e.draw(ctx,c)}}
