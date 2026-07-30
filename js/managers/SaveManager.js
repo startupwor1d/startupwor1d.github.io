@@ -1,0 +1,1 @@
+export class SaveManager{constructor(key="startup-world-v0.5-save"){this.key=key}save(d){localStorage.setItem(this.key,JSON.stringify(d))}load(){try{return JSON.parse(localStorage.getItem(this.key)||"null")}catch{return null}}clear(){localStorage.removeItem(this.key)}}

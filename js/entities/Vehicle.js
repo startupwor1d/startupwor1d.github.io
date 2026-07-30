@@ -1,0 +1,1 @@
+import{Entity}from"./Entity.js";export class Vehicle extends Entity{constructor(d,t){super(d.x,d.y);Object.assign(this,d);this.type="vehicle";this.traffic=t}update(dt){this.traffic.move(this,dt)}draw(ctx,c){const p=c.worldToScreen(this.x,this.y);ctx.fillStyle=this.color||"#e85d3f";ctx.fillRect(p.x-22,p.y-10,44,20);ctx.fillStyle="#bde5ef";ctx.fillRect(p.x-10,p.y-8,16,8)}}
