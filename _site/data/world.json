@@ -1,0 +1,65 @@
+{
+    "world": {
+        "name": "Island World",
+        "gravity": 25,
+        "waterLevel": -2,
+        "spawnPoint": {
+            "x": 0,
+            "y": 5,
+            "z": 0
+        }
+    },
+
+    "water": {
+        "enabled": true,
+        "size": 500,
+        "segments": 100,
+
+        "position": {
+            "x": 0,
+            "y": -2,
+            "z": 0
+        },
+
+        "color": "#1687d9",
+
+        "opacity": 0.85,
+
+        "roughness": 0.15,
+
+        "metalness": 0.05,
+
+        "waveHeight": 0.15,
+
+        "waveSpeed": 1.5,
+
+        "waveFrequency": 0.04,
+
+        "wave2Height": 0.1,
+
+        "wave2Speed": 2,
+
+        "wave2Frequency": 0.06,
+
+        "wave3Height": 0.1,
+
+        "wave3Speed": 1,
+
+        "wave3Frequency": 0.03
+    },
+
+    "sky": {
+        "color": "#87ceeb"
+    },
+
+    "lighting": {
+        "ambientIntensity": 2,
+        "sunIntensity": 3,
+
+        "sunPosition": {
+            "x": 100,
+            "y": 150,
+            "z": 100
+        }
+    }
+}

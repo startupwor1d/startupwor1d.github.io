@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="description"
+    content="Three.js Island World"
+>
+
+<title>Island World</title>
+
+<link
+    rel="stylesheet"
+    href="/css/style3.css"
+>
+```
+
+</head>
+
+<body>
+
+```
+<!-- Game Interface -->
+<div id="game-ui">
+
+    <div class="title">
+        Island World
+    </div>
+
+    <div class="controls">
+        <strong>WASD / Arrow Keys</strong>
+        <br>
+        Move
+        <br>
+        <strong>SPACE</strong>
+        <br>
+        Jump
+    </div>
+
+    <div id="status">
+        Loading world...
+    </div>
+
+</div>
+
+
+<!-- Three.js Import Map -->
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://unpkg.com/three@0.179.1/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.179.1/examples/jsm/"
+    }
+}
+</script>
+
+
+<!-- Main Game -->
+<script
+    type="module"
+    src="/js/main3.js"
+></script>
+```
+
+</body>
+
+</html>

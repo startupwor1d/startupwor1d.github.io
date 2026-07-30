@@ -1,0 +1,209 @@
+{
+    "buildings": [
+
+        {
+            "id": "house_1",
+
+            "name": "Starter House",
+
+            "model": "./models/buildings/house.glb",
+
+            "island": "island_1",
+
+            "position": {
+                "x": 5,
+                "y": 0,
+                "z": 5
+            },
+
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+
+            "collision": true,
+
+            "interactive": true,
+
+            "type": "house"
+        },
+
+        {
+            "id": "shop_1",
+
+            "name": "Island Shop",
+
+            "model": "./models/buildings/shop.glb",
+
+            "island": "island_1",
+
+            "position": {
+                "x": -5,
+                "y": 0,
+                "z": 5
+            },
+
+            "rotation": {
+                "x": 0,
+                "y": 1.57,
+                "z": 0
+            },
+
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+
+            "collision": true,
+
+            "interactive": true,
+
+            "type": "shop"
+        },
+
+        {
+            "id": "market_1",
+
+            "name": "Market",
+
+            "model": "./models/buildings/market.glb",
+
+            "island": "island_2",
+
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+
+            "collision": true,
+
+            "interactive": true,
+
+            "type": "market"
+        },
+
+        {
+            "id": "shop_2",
+
+            "name": "Second Shop",
+
+            "model": "./models/buildings/shop.glb",
+
+            "island": "island_2",
+
+            "position": {
+                "x": 10,
+                "y": 0,
+                "z": 5
+            },
+
+            "rotation": {
+                "x": 0,
+                "y": 0.8,
+                "z": 0
+            },
+
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+
+            "collision": true,
+
+            "interactive": true,
+
+            "type": "shop"
+        },
+
+        {
+            "id": "tower_1",
+
+            "name": "Watch Tower",
+
+            "model": "./models/buildings/tower.glb",
+
+            "island": "island_3",
+
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+
+            "collision": true,
+
+            "interactive": true,
+
+            "type": "tower"
+        },
+
+        {
+            "id": "castle_1",
+
+            "name": "Sky Castle",
+
+            "model": "./models/buildings/castle.glb",
+
+            "island": "island_4",
+
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+
+            "collision": true,
+
+            "interactive": true,
+
+            "type": "castle"
+        }
+
+    ]
+}

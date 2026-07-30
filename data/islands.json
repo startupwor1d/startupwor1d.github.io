@@ -1,0 +1,131 @@
+{
+    "islands": [
+
+        {
+            "id": "island_1",
+            "name": "Starter Island",
+
+            "model": "/models/islands/island1.fbx",
+
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+
+            "collision": true,
+
+            "buildings": [
+                "house_1",
+                "shop_1"
+            ]
+        },
+
+        {
+            "id": "island_2",
+            "name": "Market Island",
+
+            "model": "/models/islands/island1.fbx",
+
+            "position": {
+                "x": 35,
+                "y": 4,
+                "z": -10
+            },
+
+            "rotation": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+            },
+
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+
+            "collision": true,
+
+            "buildings": [
+                "market_1",
+                "shop_2"
+            ]
+        },
+
+        {
+            "id": "island_3",
+            "name": "Tower Island",
+
+            "model": "/models/islands/island3.fbx",
+
+            "position": {
+                "x": -35,
+                "y": 8,
+                "z": -20
+            },
+
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+
+            "collision": true,
+
+            "buildings": [
+                "tower_1"
+            ]
+        },
+
+        {
+            "id": "island_4",
+            "name": "Sky Island",
+
+            "model": "/models/islands/island4.fbx",
+
+            "position": {
+                "x": 0,
+                "y": 15,
+                "z": -55
+            },
+
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+
+            "collision": true,
+
+            "buildings": [
+                "castle_1"
+            ]
+        }
+
+    ]
+}
