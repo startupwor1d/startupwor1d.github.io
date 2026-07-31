@@ -1,6 +1,6 @@
 {
     "world": {
-        "name": "Island World",
+        "name": "Startup World",
         "gravity": 25,
         "waterLevel": -2,
         "spawnPoint": {

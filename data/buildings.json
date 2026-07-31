@@ -40,7 +40,7 @@
 
             "name": "Island Shop",
 
-            "model": "./models/buildings/shop.glb",
+            "model": "/models/buildings/airport.glb",
 
             "island": "island_1",
 

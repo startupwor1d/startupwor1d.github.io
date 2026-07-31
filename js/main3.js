@@ -2526,7 +2526,7 @@ async function startGame() {
 
     console.log(
 
-        "STARTING THREE.JS ISLAND WORLD"
+        "STARTING THREE.JS Startup World"
 
     );
 
