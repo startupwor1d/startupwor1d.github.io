@@ -62,6 +62,8 @@ const playerVelocity =
 
 let isGrounded = false;
 
+let respawnCooldown = 0;
+
 
 // =====================================================
 // KEYBOARD
@@ -1740,17 +1742,7 @@ async function loadPlayer() {
 
                     const spawn =
 
-                        worldData.world
-
-                            ?.spawnPoint || {
-
-                            x: 0,
-
-                            y: 5,
-
-                            z: 0
-
-                        };
+                        getSpawnPosition();
 
 
                     player.position.set(
@@ -1762,6 +1754,11 @@ async function loadPlayer() {
                         spawn.z
 
                     );
+
+
+                    isGrounded =
+
+                        true;
 
 
                     scene.add(
@@ -2197,6 +2194,21 @@ function updatePlayer(
 
     if (
 
+        respawnCooldown > 0
+
+    ) {
+
+        respawnCooldown -=
+
+            delta;
+
+    }
+
+
+    if (
+
+        respawnCooldown <= 0 &&
+
         player.position.y <
 
         WATER_LEVEL - 10
@@ -2365,6 +2377,90 @@ function jump() {
 
 
 // =====================================================
+// SPAWN POSITION
+// =====================================================
+
+function getSpawnPosition() {
+
+    const config =
+
+        worldData?.world
+
+            ?.spawnPoint || {};
+
+
+    const islandId =
+
+        config.island ||
+
+        "island_1";
+
+
+    const island =
+
+        islands.find(
+
+            (item) =>
+
+                item.id ===
+
+                islandId
+
+        );
+
+
+    if (island) {
+
+        const box =
+
+            new THREE.Box3()
+
+                .setFromObject(
+
+                    island.object
+
+                );
+
+
+        return {
+
+            x:
+
+                config.x ??
+
+                (box.min.x + box.max.x) / 2,
+
+            y:
+
+                box.max.y +
+
+                (config.yOffset ?? 0.5),
+
+            z:
+
+                config.z ??
+
+                (box.min.z + box.max.z) / 2
+
+        };
+
+    }
+
+
+    return {
+
+        x: config.x ?? 0,
+
+        y: config.y ?? 5,
+
+        z: config.z ?? 0
+
+    };
+
+}
+
+
+// =====================================================
 // RESPAWN
 // =====================================================
 
@@ -2379,17 +2475,7 @@ function respawnPlayer() {
 
     const spawn =
 
-        worldData.world
-
-            ?.spawnPoint || {
-
-            x: 0,
-
-            y: 5,
-
-            z: 0
-
-        };
+        getSpawnPosition();
 
 
     player.position.set(
@@ -2412,6 +2498,16 @@ function respawnPlayer() {
         0
 
     );
+
+
+    isGrounded =
+
+        true;
+
+
+    respawnCooldown =
+
+        1.0;
 
 }
 

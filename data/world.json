@@ -4,9 +4,8 @@
         "gravity": 25,
         "waterLevel": -2,
         "spawnPoint": {
-            "x": 0,
-            "y": 5,
-            "z": 0
+            "island": "island_1",
+            "yOffset": 0.5
         }
     },
 
