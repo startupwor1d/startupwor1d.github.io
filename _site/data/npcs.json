@@ -1,0 +1,46 @@
+{
+    "npcs": [
+        {
+            "id": "alex",
+            "name": "Alex",
+            "island": "island_1",
+            "model": "/models/dude123.glb",
+            "position": { "x": 3, "y": 0, "z": 2 },
+            "rotation": { "x": 0, "y": 2.5, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "dialogue": [
+                "Hey! I'm Alex. I spend way too much time around founders and coffee.",
+                "Every great startup starts with a real problem — not a cool feature.",
+                "Go talk to people on the other islands. You'll learn fast."
+            ]
+        },
+        {
+            "id": "maya",
+            "name": "Maya",
+            "island": "island_2",
+            "model": "/models/dude123.glb",
+            "position": { "x": 0, "y": 0, "z": 3 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "dialogue": [
+                "I'm Maya. This is Market Island — where ideas meet customers.",
+                "You can't build product-market fit in a vacuum.",
+                "Talk to shop owners, listen to complaints, find what people actually need."
+            ]
+        },
+        {
+            "id": "sam",
+            "name": "Sam",
+            "island": "island_3",
+            "model": "/models/dude123.glb",
+            "position": { "x": -2, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 1.2, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "dialogue": [
+                "Sam here. Tower Island is where founders learn to pitch and scale.",
+                "Investors don't fund ideas — they fund traction and teams.",
+                "Build something people want, then come back and tell your story."
+            ]
+        }
+    ]
+}

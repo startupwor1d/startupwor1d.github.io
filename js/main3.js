@@ -8,6 +8,14 @@ import {
     FBXLoader
 } from "three/addons/loaders/FBXLoader.js";
 
+import {
+    DialogueManager
+} from "./dialogue/DialogueManager.js";
+
+import {
+    DialogueUI
+} from "./ui/DialogueUI.js";
+
 
 // =====================================================
 // GLOBAL VARIABLES
@@ -16,6 +24,7 @@ import {
 let worldData = null;
 let islandsData = null;
 let buildingsData = null;
+let npcsData = null;
 
 let player = null;
 
@@ -35,6 +44,17 @@ const islands = [];
 
 const buildings = [];
 
+const npcs = [];
+
+const npcPosition =
+    new THREE.Vector3();
+
+let dialogueManager = null;
+
+let dialogueUI = null;
+
+const INTERACT_DISTANCE = 4;
+
 
 // =====================================================
 // GAME SETTINGS
@@ -44,7 +64,7 @@ let GRAVITY = 25;
 
 let WATER_LEVEL = -2;
 
-const PLAYER_SPEED = 6;
+const PLAYER_SPEED = 20;
 
 const JUMP_FORCE = 10;
 
@@ -690,6 +710,15 @@ async function loadWorldConfig() {
         await loadJSON(
 
             "./data/buildings.json"
+
+        );
+
+
+    npcsData =
+
+        await loadJSON(
+
+            "./data/npcs.json"
 
         );
 
@@ -1683,6 +1712,356 @@ async function loadBuildings() {
 
 
 // =====================================================
+// LOAD NPCS
+// =====================================================
+
+async function loadNPCs() {
+
+    console.log(
+
+        "===================================="
+
+    );
+
+    console.log(
+
+        "LOADING NPCS"
+
+    );
+
+    console.log(
+
+        "===================================="
+
+    );
+
+
+    if (
+
+        !npcsData ||
+
+        !npcsData.npcs
+
+    ) {
+
+        console.error(
+
+            "[NPCS] No NPCs found"
+
+        );
+
+        return;
+
+    }
+
+
+    for (
+
+        const data of
+
+        npcsData.npcs
+
+    ) {
+
+        const island =
+
+            islands.find(
+
+                (item) =>
+
+                    item.id ===
+
+                    data.island
+
+            );
+
+
+        if (!island) {
+
+            console.error(
+
+                "[NPC] Island not found:",
+
+                data.island
+
+            );
+
+            continue;
+
+        }
+
+
+        await new Promise(
+
+            (resolve) => {
+
+                loadModel(
+
+                    data.model,
+
+                    (npcModel) => {
+
+                        applyTransform(
+
+                            npcModel,
+
+                            data
+
+                        );
+
+
+                        prepareModel(
+
+                            npcModel
+
+                        );
+
+
+                        island.object.add(
+
+                            npcModel
+
+                        );
+
+
+                        npcs.push({
+
+                            id:
+
+                                data.id,
+
+                            name:
+
+                                data.name,
+
+                            data:
+
+                                data,
+
+                            dialogue:
+
+                                data.dialogue,
+
+                            object:
+
+                                npcModel,
+
+                            island:
+
+                                island
+
+                        });
+
+
+                        console.log(
+
+                            "[NPC] Loaded:",
+
+                            data.id,
+
+                            "on",
+
+                            data.island
+
+                        );
+
+
+                        resolve();
+
+                    },
+
+                    undefined,
+
+                    (error) => {
+
+                        console.error(
+
+                            "[NPC] Failed:",
+
+                            data.model,
+
+                            error
+
+                        );
+
+
+                        resolve();
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    }
+
+
+    console.log(
+
+        "[NPCS] Total loaded:",
+
+        npcs.length
+
+    );
+
+}
+
+
+// =====================================================
+// NPC INTERACTION
+// =====================================================
+
+function getNearestNPC() {
+
+    if (
+
+        !player ||
+
+        npcs.length === 0
+
+    ) {
+
+        return null;
+
+    }
+
+
+    let nearest = null;
+
+    let minDist =
+
+        INTERACT_DISTANCE;
+
+
+    for (
+
+        const npc of
+
+        npcs
+
+    ) {
+
+        npc.object.getWorldPosition(
+
+            npcPosition
+
+        );
+
+
+        const dist =
+
+            player.position.distanceTo(
+
+                npcPosition
+
+            );
+
+
+        if (
+
+            dist < minDist
+
+        ) {
+
+            minDist =
+
+                dist;
+
+            nearest =
+
+                npc;
+
+        }
+
+    }
+
+
+    return nearest;
+
+}
+
+
+function tryInteract() {
+
+    if (
+
+        dialogueManager?.active
+
+    ) {
+
+        dialogueManager.advance();
+
+        return;
+
+    }
+
+
+    const npc =
+
+        getNearestNPC();
+
+
+    if (
+
+        npc &&
+
+        dialogueManager
+
+    ) {
+
+        dialogueManager.openNPC(
+
+            npc
+
+        );
+
+    }
+
+}
+
+
+function updateInteraction() {
+
+    if (
+
+        !dialogueUI ||
+
+        dialogueManager?.active
+
+    ) {
+
+        dialogueUI?.hidePrompt();
+
+        return;
+
+    }
+
+
+    const npc =
+
+        getNearestNPC();
+
+
+    if (npc) {
+
+        dialogueUI.showPrompt(
+
+            `Press E to talk to ${npc.name}`
+
+        );
+
+    } else {
+
+        dialogueUI.hidePrompt();
+
+    }
+
+}
+
+
+// =====================================================
 // LOAD PLAYER
 // =====================================================
 
@@ -1969,6 +2348,21 @@ window.addEventListener(
 
         }
 
+
+        if (
+
+            event.code ===
+
+            "KeyE"
+
+        ) {
+
+            event.preventDefault();
+
+            tryInteract();
+
+        }
+
     }
 
 );
@@ -2000,6 +2394,17 @@ function updatePlayer(
 ) {
 
     if (!player) {
+
+        return;
+
+    }
+
+
+    if (
+
+        dialogueManager?.active
+
+    ) {
 
         return;
 
@@ -2700,6 +3105,41 @@ async function startGame() {
 
 
         // --------------------------------------------
+        // NPCs
+        // --------------------------------------------
+
+        updateStatus(
+
+            "Loading NPCs..."
+
+        );
+
+
+        await loadNPCs();
+
+
+        // --------------------------------------------
+        // Dialogue
+        // --------------------------------------------
+
+        dialogueUI =
+
+            new DialogueUI();
+
+
+        dialogueManager =
+
+            new DialogueManager();
+
+
+        dialogueManager.attachUI(
+
+            dialogueUI
+
+        );
+
+
+        // --------------------------------------------
         // Player
         // --------------------------------------------
 
@@ -2834,6 +3274,9 @@ function animate(
         delta
 
     );
+
+
+    updateInteraction();
 
 
     // Camera

@@ -1,1 +1,73 @@
-export class DialogueManager{constructor(){this.ui=null;this.active=false}attachUI(ui){this.ui=ui}openNPC(n){this.active=true;const d={alex:["Alex","Hey! I'm Alex. I spend way too much time around founders and coffee.","If you're building something, talk to people before you write a single line of code."],maya:["Maya","The city is full of founders with problems waiting to be solved.","Go talk to a few people. You might find something worth building."],sam:["Sam","The best startups usually begin with a painful problem, not a clever feature."]}[n.id]||[n.name,"Good to meet you. What's your startup idea?"];this.ui?.showDialogue(d[0],d.slice(1),()=>this.close())}close(){this.active=false;this.ui?.hideDialogue()}}
+export class DialogueManager {
+
+    constructor() {
+
+        this.ui = null;
+
+        this.active = false;
+
+    }
+
+
+    attachUI(ui) {
+
+        this.ui = ui;
+
+    }
+
+
+    openNPC(npc) {
+
+        this.active = true;
+
+
+        const name =
+
+            npc.name ||
+
+            npc.data?.name ||
+
+            "Stranger";
+
+
+        const lines =
+
+            npc.dialogue ||
+
+            npc.data?.dialogue ||
+
+            [
+                "Good to meet you. What's your startup idea?"
+            ];
+
+
+        this.ui?.showDialogue(
+
+            name,
+
+            lines,
+
+            () =>
+                this.close()
+
+        );
+
+    }
+
+
+    advance() {
+
+        this.ui?.advance();
+
+    }
+
+
+    close() {
+
+        this.active = false;
+
+        this.ui?.hideDialogue();
+
+    }
+
+}
