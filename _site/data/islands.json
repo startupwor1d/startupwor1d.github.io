@@ -5,7 +5,7 @@
             "id": "island_1",
             "name": "Starter Island",
 
-            "model": "/models/islands/island1.fbx",
+            "model": "/models/islands/island.fbx",
 
             "position": {
                 "x": 0,
@@ -20,9 +20,9 @@
             },
 
             "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
+                "x": 0.5,
+                "y": 0.5,
+                "z": 0.5
             },
 
             "collision": true,
@@ -37,7 +37,7 @@
             "id": "island_2",
             "name": "Market Island",
 
-            "model": "/models/islands/island1.fbx",
+            "model": "/models/islands/island0.fbx",
 
             "position": {
                 "x": 35,
