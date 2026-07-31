@@ -6,7 +6,7 @@
 
             "name": "Starter House",
 
-            "model": "./models/buildings/house.glb",
+            "model": "./models/buildings/coffee.glb",
 
             "island": "island_1",
 

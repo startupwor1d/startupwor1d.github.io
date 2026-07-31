@@ -95,7 +95,8 @@ const camera =
         2000
 
     );
-
+    window.camera = camera;
+    window.scene = scene;
 
 // =====================================================
 // RENDERER
