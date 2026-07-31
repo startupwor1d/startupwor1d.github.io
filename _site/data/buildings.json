@@ -6,7 +6,7 @@
 
             "name": "Starter House",
 
-            "model": "./models/buildings/house.glb",
+            "model": "./models/buildings/coffee.glb",
 
             "island": "island_1",
 
@@ -40,7 +40,7 @@
 
             "name": "Island Shop",
 
-            "model": "./models/buildings/shop.glb",
+            "model": "/models/buildings/airport.glb",
 
             "island": "island_1",
 

@@ -95,7 +95,8 @@ const camera =
         2000
 
     );
-
+    window.camera = camera;
+    window.scene = scene;
 
 // =====================================================
 // RENDERER
@@ -1709,7 +1710,7 @@ async function loadPlayer() {
 
     const playerModel =
 
-        "./models/character.glb";
+        "/models/dude123.glb";
 
 
     await new Promise(
@@ -2525,7 +2526,7 @@ async function startGame() {
 
     console.log(
 
-        "STARTING THREE.JS ISLAND WORLD"
+        "STARTING THREE.JS Startup World"
 
     );
 
