@@ -8,14 +8,6 @@ import {
     FBXLoader
 } from "three/addons/loaders/FBXLoader.js";
 
-import {
-    DialogueManager
-} from "./dialogue/DialogueManager.js";
-
-import {
-    DialogueUI
-} from "./ui/DialogueUI.js";
-
 
 // =====================================================
 // GLOBAL VARIABLES
@@ -24,7 +16,6 @@ import {
 let worldData = null;
 let islandsData = null;
 let buildingsData = null;
-let npcsData = null;
 
 let player = null;
 
@@ -44,17 +35,6 @@ const islands = [];
 
 const buildings = [];
 
-const npcs = [];
-
-const npcPosition =
-    new THREE.Vector3();
-
-let dialogueManager = null;
-
-let dialogueUI = null;
-
-const INTERACT_DISTANCE = 4;
-
 
 // =====================================================
 // GAME SETTINGS
@@ -64,7 +44,7 @@ let GRAVITY = 25;
 
 let WATER_LEVEL = -2;
 
-const PLAYER_SPEED = 20;
+const PLAYER_SPEED = 6;
 
 const JUMP_FORCE = 10;
 
@@ -81,8 +61,6 @@ const playerVelocity =
     new THREE.Vector3();
 
 let isGrounded = false;
-
-let respawnCooldown = 0;
 
 
 // =====================================================
@@ -710,15 +688,6 @@ async function loadWorldConfig() {
         await loadJSON(
 
             "./data/buildings.json"
-
-        );
-
-
-    npcsData =
-
-        await loadJSON(
-
-            "./data/npcs.json"
 
         );
 
@@ -1712,356 +1681,6 @@ async function loadBuildings() {
 
 
 // =====================================================
-// LOAD NPCS
-// =====================================================
-
-async function loadNPCs() {
-
-    console.log(
-
-        "===================================="
-
-    );
-
-    console.log(
-
-        "LOADING NPCS"
-
-    );
-
-    console.log(
-
-        "===================================="
-
-    );
-
-
-    if (
-
-        !npcsData ||
-
-        !npcsData.npcs
-
-    ) {
-
-        console.error(
-
-            "[NPCS] No NPCs found"
-
-        );
-
-        return;
-
-    }
-
-
-    for (
-
-        const data of
-
-        npcsData.npcs
-
-    ) {
-
-        const island =
-
-            islands.find(
-
-                (item) =>
-
-                    item.id ===
-
-                    data.island
-
-            );
-
-
-        if (!island) {
-
-            console.error(
-
-                "[NPC] Island not found:",
-
-                data.island
-
-            );
-
-            continue;
-
-        }
-
-
-        await new Promise(
-
-            (resolve) => {
-
-                loadModel(
-
-                    data.model,
-
-                    (npcModel) => {
-
-                        applyTransform(
-
-                            npcModel,
-
-                            data
-
-                        );
-
-
-                        prepareModel(
-
-                            npcModel
-
-                        );
-
-
-                        island.object.add(
-
-                            npcModel
-
-                        );
-
-
-                        npcs.push({
-
-                            id:
-
-                                data.id,
-
-                            name:
-
-                                data.name,
-
-                            data:
-
-                                data,
-
-                            dialogue:
-
-                                data.dialogue,
-
-                            object:
-
-                                npcModel,
-
-                            island:
-
-                                island
-
-                        });
-
-
-                        console.log(
-
-                            "[NPC] Loaded:",
-
-                            data.id,
-
-                            "on",
-
-                            data.island
-
-                        );
-
-
-                        resolve();
-
-                    },
-
-                    undefined,
-
-                    (error) => {
-
-                        console.error(
-
-                            "[NPC] Failed:",
-
-                            data.model,
-
-                            error
-
-                        );
-
-
-                        resolve();
-
-                    }
-
-                );
-
-            }
-
-        );
-
-    }
-
-
-    console.log(
-
-        "[NPCS] Total loaded:",
-
-        npcs.length
-
-    );
-
-}
-
-
-// =====================================================
-// NPC INTERACTION
-// =====================================================
-
-function getNearestNPC() {
-
-    if (
-
-        !player ||
-
-        npcs.length === 0
-
-    ) {
-
-        return null;
-
-    }
-
-
-    let nearest = null;
-
-    let minDist =
-
-        INTERACT_DISTANCE;
-
-
-    for (
-
-        const npc of
-
-        npcs
-
-    ) {
-
-        npc.object.getWorldPosition(
-
-            npcPosition
-
-        );
-
-
-        const dist =
-
-            player.position.distanceTo(
-
-                npcPosition
-
-            );
-
-
-        if (
-
-            dist < minDist
-
-        ) {
-
-            minDist =
-
-                dist;
-
-            nearest =
-
-                npc;
-
-        }
-
-    }
-
-
-    return nearest;
-
-}
-
-
-function tryInteract() {
-
-    if (
-
-        dialogueManager?.active
-
-    ) {
-
-        dialogueManager.advance();
-
-        return;
-
-    }
-
-
-    const npc =
-
-        getNearestNPC();
-
-
-    if (
-
-        npc &&
-
-        dialogueManager
-
-    ) {
-
-        dialogueManager.openNPC(
-
-            npc
-
-        );
-
-    }
-
-}
-
-
-function updateInteraction() {
-
-    if (
-
-        !dialogueUI ||
-
-        dialogueManager?.active
-
-    ) {
-
-        dialogueUI?.hidePrompt();
-
-        return;
-
-    }
-
-
-    const npc =
-
-        getNearestNPC();
-
-
-    if (npc) {
-
-        dialogueUI.showPrompt(
-
-            `Press E to talk to ${npc.name}`
-
-        );
-
-    } else {
-
-        dialogueUI.hidePrompt();
-
-    }
-
-}
-
-
-// =====================================================
 // LOAD PLAYER
 // =====================================================
 
@@ -2121,7 +1740,17 @@ async function loadPlayer() {
 
                     const spawn =
 
-                        getSpawnPosition();
+                        worldData.world
+
+                            ?.spawnPoint || {
+
+                            x: 0,
+
+                            y: 5,
+
+                            z: 0
+
+                        };
 
 
                     player.position.set(
@@ -2133,11 +1762,6 @@ async function loadPlayer() {
                         spawn.z
 
                     );
-
-
-                    isGrounded =
-
-                        true;
 
 
                     scene.add(
@@ -2348,21 +1972,6 @@ window.addEventListener(
 
         }
 
-
-        if (
-
-            event.code ===
-
-            "KeyE"
-
-        ) {
-
-            event.preventDefault();
-
-            tryInteract();
-
-        }
-
     }
 
 );
@@ -2394,17 +2003,6 @@ function updatePlayer(
 ) {
 
     if (!player) {
-
-        return;
-
-    }
-
-
-    if (
-
-        dialogueManager?.active
-
-    ) {
 
         return;
 
@@ -2599,21 +2197,6 @@ function updatePlayer(
 
     if (
 
-        respawnCooldown > 0
-
-    ) {
-
-        respawnCooldown -=
-
-            delta;
-
-    }
-
-
-    if (
-
-        respawnCooldown <= 0 &&
-
         player.position.y <
 
         WATER_LEVEL - 10
@@ -2782,90 +2365,6 @@ function jump() {
 
 
 // =====================================================
-// SPAWN POSITION
-// =====================================================
-
-function getSpawnPosition() {
-
-    const config =
-
-        worldData?.world
-
-            ?.spawnPoint || {};
-
-
-    const islandId =
-
-        config.island ||
-
-        "island_1";
-
-
-    const island =
-
-        islands.find(
-
-            (item) =>
-
-                item.id ===
-
-                islandId
-
-        );
-
-
-    if (island) {
-
-        const box =
-
-            new THREE.Box3()
-
-                .setFromObject(
-
-                    island.object
-
-                );
-
-
-        return {
-
-            x:
-
-                config.x ??
-
-                (box.min.x + box.max.x) / 2,
-
-            y:
-
-                box.max.y +
-
-                (config.yOffset ?? 0.5),
-
-            z:
-
-                config.z ??
-
-                (box.min.z + box.max.z) / 2
-
-        };
-
-    }
-
-
-    return {
-
-        x: config.x ?? 0,
-
-        y: config.y ?? 5,
-
-        z: config.z ?? 0
-
-    };
-
-}
-
-
-// =====================================================
 // RESPAWN
 // =====================================================
 
@@ -2880,7 +2379,17 @@ function respawnPlayer() {
 
     const spawn =
 
-        getSpawnPosition();
+        worldData.world
+
+            ?.spawnPoint || {
+
+            x: 0,
+
+            y: 5,
+
+            z: 0
+
+        };
 
 
     player.position.set(
@@ -2903,16 +2412,6 @@ function respawnPlayer() {
         0
 
     );
-
-
-    isGrounded =
-
-        true;
-
-
-    respawnCooldown =
-
-        1.0;
 
 }
 
@@ -3105,41 +2604,6 @@ async function startGame() {
 
 
         // --------------------------------------------
-        // NPCs
-        // --------------------------------------------
-
-        updateStatus(
-
-            "Loading NPCs..."
-
-        );
-
-
-        await loadNPCs();
-
-
-        // --------------------------------------------
-        // Dialogue
-        // --------------------------------------------
-
-        dialogueUI =
-
-            new DialogueUI();
-
-
-        dialogueManager =
-
-            new DialogueManager();
-
-
-        dialogueManager.attachUI(
-
-            dialogueUI
-
-        );
-
-
-        // --------------------------------------------
         // Player
         // --------------------------------------------
 
@@ -3274,9 +2738,6 @@ function animate(
         delta
 
     );
-
-
-    updateInteraction();
 
 
     // Camera
