@@ -1710,7 +1710,7 @@ async function loadPlayer() {
 
     const playerModel =
 
-        "./models/character.glb";
+        "/models/dude123.glb";
 
 
     await new Promise(

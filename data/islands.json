@@ -37,7 +37,7 @@
             "id": "island_2",
             "name": "Market Island",
 
-            "model": "/models/islands/island0.fbx",
+            "model": "/models/islands/island.fbx",
 
             "position": {
                 "x": 35,
@@ -69,7 +69,7 @@
             "id": "island_3",
             "name": "Tower Island",
 
-            "model": "/models/islands/island3.fbx",
+            "model": "/models/islands/island.fbx",
 
             "position": {
                 "x": -35,
@@ -100,7 +100,7 @@
             "id": "island_4",
             "name": "Sky Island",
 
-            "model": "/models/islands/island4.fbx",
+            "model": "/models/islands/island.fbx",
 
             "position": {
                 "x": 0,
