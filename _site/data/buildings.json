@@ -74,7 +74,7 @@
 
             "name": "Market",
 
-            "model": "./models/buildings/market.glb",
+            "model": "./models/buildings/market.fbx",
 
             "island": "island_2",
 
@@ -108,7 +108,7 @@
 
             "name": "Second Shop",
 
-            "model": "./models/buildings/shop.glb",
+            "model": "./models/buildings/shop.fbx",
 
             "island": "island_2",
 

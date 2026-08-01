@@ -9,6 +9,9 @@ import {
 } from "three/addons/loaders/FBXLoader.js";
 
 import {
+    USDZLoader
+} from "three/addons/loaders/USDZLoader.js";
+import {
     DialogueManager
 } from "./dialogue/DialogueManager.js";
 
@@ -182,6 +185,8 @@ const gltfLoader =
 const fbxLoader =
     new FBXLoader();
 
+    const usdzLoader =
+    new USDZLoader();
 
 // =====================================================
 // STATUS
